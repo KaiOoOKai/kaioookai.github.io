@@ -27,24 +27,10 @@ const path = d3.geoPath(projection);
 
 
 setup = function (dataPath) {
-    d3.csv(dataPath).then(function (data) {
-
-        const g = svg.append('g');
-
-
-        // let circles = g
-        // .selectAll("circle")
-        // .data(data)
-        // .enter()
-        // ERROR
-        // .attr("fill", function (d) {
-        //     console.log(d.adm0_name);
-        //     return "red";
-        // });
-
-        // parse the topojson file to produce the shape of each country
-        d3.json("world.topojson")
-        .then(data=> {
+    // parse the topojson file to produce the shape of each country
+    d3.json("world.topojson").then(data=> {
+        d3.csv(dataPath).then(function (csvData) {
+            const g = svg.append('g');
             const countries = topojson.feature(data, data.objects.countries);
 
             g.selectAll('path')
