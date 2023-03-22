@@ -7,11 +7,21 @@ const MARGIN = {
     "TOP":100,
     "BOTTOM":200,
 };
+let index = 0;
 
 window.onload = function () {
     setup("../sources/num_markets.csv");
 };
-
+const myPromise = new Promise((resolve, reject) => {
+    let cms = "Hygraph";
+  
+    if (cms === "Sanity") {
+      resolve("Success: The promise has successfully resolved!");
+    } else {
+      reject("Failure: The promise has failed!");
+    }
+  });
+  
 var svg = d3.select("#map");
 
 // FIXME: center to web page
@@ -32,16 +42,14 @@ const colorScale = d3.scaleLinear()
 
 let setup = function (dataPath) {
     // parse the topojson file to produce the shape of each country
-    d3.json("../sources/world.topojson").then(jsonData=> {
-        // new Promise(function(resolve, reject) {
+    return d3.json("../sources/world.topojson").then(jsonData=> {
+        return d3.csv(dataPath).then(function (csvData) {
+            // return new Promise(function(resolve, reject) {
 
-        //     jsonData.features.forEach(function(d) {
-        //         console.log(d.properties.name);
-        //     })
-        // });
+            // csvData.forEach(function(item, index, arr) {
+            //     console.log(item.NumOfMarkets);
+            // });
 
-        d3.csv(dataPath).then(function (csvData) {
-            console.log(csvData[0].CountryName)
             const g = svg.append('g');
             const countries = topojson.feature(jsonData, jsonData.objects.countries);
 
@@ -55,15 +63,32 @@ let setup = function (dataPath) {
                 return "country"
             })
             // .style("fill", "yellow")
-            .style("fill", d=> {
-
-                // console.log(csvData)
-                return colorScale(1)
+            .style("fill", (d, i) => {
+                myPromise
+                .then((message) => {
+                    console.log(message);
+                    var name2 = csvData[i].CountryName;
+                    console.log( name2 == d.properties.name);
+    
+                    if (d.properties.name == name) {
+                    // if (d.properties.name == "Afghanistan") {
+                    // if (d.properties.name == "Djibouti") {
+                        // console.log(csvData[i].CountryName)
+                        console.log("ye")
+                        return colorScale(csvData[i].NumOfMarkets);
+                    }
+                    else {
+                        return "#cdcdcd";
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
             })
             .attr("d", path)
             // TODO: when clicked, will link to the stack bargraph
             // .on("click", function(d){
-            //     console.log(d);
+            //     console.log(this);
             //     d3.select(this).classed("selected", true);
             // })
             .on("mouseover", function(d){
@@ -73,7 +98,10 @@ let setup = function (dataPath) {
                 d3.select(this).classed("selected", false)
             });
         });
+    // });
+        
     });
+
 }
 
 
