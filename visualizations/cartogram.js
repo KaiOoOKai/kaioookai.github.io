@@ -1,89 +1,123 @@
-const   width  = 1344,
-        height = 756;
+const   width  = 1850,
+        height = 875;
 
 const MARGIN = {
-    "LEFT":100,
-    "RIGHT":100,
-    "TOP":100,
-    "BOTTOM":200,
+    "LEFT":0,
+    "RIGHT":0,
+    "TOP":0,
+    "BOTTOM":0,
 };
 let index = 0;
 
 window.onload = function () {
     setup("../sources/num_markets.csv");
 };
-const myPromise = new Promise((resolve, reject) => {
-    let cms = "Hygraph";
-  
-    if (cms === "Sanity") {
-      resolve("Success: The promise has successfully resolved!");
-    } else {
-      reject("Failure: The promise has failed!");
-    }
-  });
-  
+
+let zoom = d3.zoom()
+	.scaleExtent([0.25, 10])
+	.on('zoom', handleZoom);
+
+function updateData() {
+	data = [];
+	for(let i=0; i<numPoints; i++) {
+		data.push({
+			id: i,
+			x: Math.random() * width,
+			y: Math.random() * height
+		});
+	}
+}
+
+function initZoom() {
+	d3.select('svg')
+		.call(zoom);
+}
+
+function handleZoom(e) {
+	d3.select('svg g')
+		.attr('transform', e.transform);
+}
+
+function zoomIn() {
+	d3.select('svg')
+		.transition()
+		.call(zoom.scaleBy, 2);
+}
+
+function zoomOut() {
+	d3.select('svg')
+		.transition()
+		.call(zoom.scaleBy, 0.5);
+}
+
+function resetZoom() {
+	d3.select('svg')
+		.transition()
+		.call(zoom.scaleTo, 1);
+}
+
+function center() {
+	d3.select('svg')
+		.transition()
+		.call(zoom.translateTo, 0.5 * width, 0.5 * height);
+}
+
+function panLeft() {
+	d3.select('svg')
+		.transition()
+		.call(zoom.translateBy, -50, 0);
+}
+
+function panRight() {
+	d3.select('svg')
+		.transition()
+		.call(zoom.translateBy, 50, 0);
+}
+
+
+
 var svg = d3.select("#map");
 
-// FIXME: center to web page
-svg.attr('width',width).attr('height', height)
-// .translate([MARGIN.LEFT, width - MARGIN.RIGHT])
-// .translate([height-MARGIN.BOTTOM, MARGIN.TOP]);
+svg.attr('width', width).attr('height', height)
 
 const projection = d3.geoMercator()
-                    .scale(200)
-                    .translate([width /2, height / 2]); // center the map
+                .scale(300)
+                .translate([width /2, height / 2 + 80]); // center the map
 
 const path = d3.geoPath(projection);
 
 // Prepare a color palette
 const colorScale = d3.scaleLinear()
     .domain([1, 205]) // FIXME - should be from 1 to the max num of markets in a 
-    .range(["green", "red"])
+    .range(["#3bcc00", "#cc0000"])
 
 let setup = function (dataPath) {
     // parse the topojson file to produce the shape of each country
+    const g = svg.append('g');
+
     return d3.json("../sources/world.topojson").then(jsonData=> {
-        return d3.csv(dataPath).then(function (csvData) {
-            // return new Promise(function(resolve, reject) {
-
-            // csvData.forEach(function(item, index, arr) {
-            //     console.log(item.NumOfMarkets);
-            // });
-
-            const g = svg.append('g');
+        return d3.csv('../sources/cities.csv').then(function (csvData) {
             const countries = topojson.feature(jsonData, jsonData.objects.countries);
 
             g.selectAll('path')
             .data(countries.features)
             .enter()
             .append("path")
-            .attr("class", function(d) {
-                // console.log(d.properties.name);     // TODO: colour the countries diff colours based on CSV?
-                // d3.select(this).classed("country", "yellow")
-                return "country"
-            })
-            // .style("fill", "yellow")
+            .attr("class", "country")
             .style("fill", (d, i) => {
-                myPromise
-                .then((message) => {
-                    console.log(message);
-                    var name2 = csvData[i].CountryName;
-                    console.log( name2 == d.properties.name);
-    
-                    if (d.properties.name == name) {
-                    // if (d.properties.name == "Afghanistan") {
-                    // if (d.properties.name == "Djibouti") {
-                        // console.log(csvData[i].CountryName)
-                        console.log("ye")
-                        return colorScale(csvData[i].NumOfMarkets);
-                    }
-                    else {
-                        return "#cdcdcd";
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+                // console.log(val)
+                // let val = csvData.find(e => e.CountryName == d.properties.name);
+
+                // if (val != undefined) {
+                //     if (d.properties.name == val.CountryName) {
+                //         return colorScale(val.NumOfMarkets);
+                //         // return "blue";
+                //     }
+                //     console.log(val.CountryName)
+                // } else {
+                //     return "#c8c8c8";
+                // }
+                return "#c8c8c8";
             })
             .attr("d", path)
             // TODO: when clicked, will link to the stack bargraph
@@ -91,14 +125,79 @@ let setup = function (dataPath) {
             //     console.log(this);
             //     d3.select(this).classed("selected", true);
             // })
+            // .append("a").attr("xlink:href", function(d, i) {
+            //     console.log(d)
+            //     return "https://www.google.com/search?q="+d.properties.name;}
+            // )
             .on("mouseover", function(d){
                 d3.select(this).classed("selected", true)
             })
             .on("mouseout", function(d){
                 d3.select(this).classed("selected", false)
-            });
+            })
+
+          // add points for cities 
+          g.selectAll("circle")
+          .data(csvData)
+          .enter()
+          .append("a").attr("xlink:href", function(d) {
+                         return "https://www.google.com/search?q="+d.city;}
+                     )
+          .append("circle")
+          .attr("cx", function(d) {
+                return projection([d.lng, d.lat])[0];
+          })
+          .attr("cy", function(d) {
+                return projection([d.lng, d.lat])[1];
+          })
+          .attr("r", 5)
+          .style("fill", "red");
         });
-    // });
+
+
+        // return d3.csv(dataPath).then(function (csvData) {
+        //     const countries = topojson.feature(jsonData, jsonData.objects.countries);
+
+        //     g.selectAll('path')
+        //     .data(countries.features)
+        //     .enter()
+        //     .append("path")
+        //     .attr("class", "country")
+        //     .style("fill", (d, i) => {
+        //         // console.log(val)
+        //         let val = csvData.find(e => e.CountryName == d.properties.name);
+
+        //         if (val != undefined) {
+        //             if (d.properties.name == val.CountryName) {
+        //                 return colorScale(val.NumOfMarkets);
+        //                 // return "blue";
+        //             }
+        //             console.log(val.CountryName)
+        //         } else {
+        //             return "#c8c8c8";
+        //         }
+        //     })
+        //     .attr("d", path)
+        //     // TODO: when clicked, will link to the stack bargraph
+        //     // .on("click", function(d){
+        //     //     console.log(this);
+        //     //     d3.select(this).classed("selected", true);
+        //     // })
+        //     .on("mouseover", function(d){
+        //         d3.select(this).classed("selected", true)
+        //     })
+        //     .on("mouseout", function(d){
+        //         d3.select(this).classed("selected", false)
+        //     })
+
+        //     // FIXME - need location of cities :(
+        //     .append("circle", ".pin")
+        //     .attr("stroke", "black")
+        //     .attr("r", (d)=> 5)
+        //     .attr("opacity", (d) => {
+        //         return 1;
+        //     });
+        // });
         
     });
 

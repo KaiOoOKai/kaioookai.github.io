@@ -7,8 +7,15 @@
     </head>
 
     <body>
+        <button onclick="zoomIn()">Zoom in</button>
+        <button onclick="zoomOut()">Zoom out</button>
+        <button onclick="resetZoom()">Reset zoom</button>
+        <button onclick="panLeft()">Pan left</button>
+        <button onclick="panRight()">Pan right</button>
+        <button onclick="center()">Center</button>
         <div id="MAIN" class="relative">
             <svg id="map"></svg>
+            
         </div>
     </body>
     <script src="https://d3js.org/d3.v6.min.js"></script>

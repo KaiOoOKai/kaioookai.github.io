@@ -1,5 +1,5 @@
 #map{
-    background-color: rgb(244, 244, 244);
+    background-color: rgb(210, 235, 255);
 }
 /* 
 .country {
@@ -7,7 +7,9 @@
 } */
 
 path {
-    stroke: rgb(133, 131, 131);
+    stroke: rgb(64, 64, 64);
+
+    /* stroke: rgb(133, 131, 131); */
 }
 
 .selected {
