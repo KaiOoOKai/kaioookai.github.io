@@ -9,74 +9,50 @@ const MARGIN = {
 };
 let index = 0;
 
-window.onload = function () {
-    setup("../data/subset_data/num_markets.csv");
-};
-
-let zoom = d3.zoom()
-	.scaleExtent([0.25, 10])
-	.on('zoom', handleZoom);
-
-function updateData() {
-	data = [];
-	for(let i=0; i<numPoints; i++) {
-		data.push({
-			id: i,
-			x: Math.random() * width,
-			y: Math.random() * height
-		});
-	}
-}
-
-function initZoom() {
-	d3.select('svg')
-		.call(zoom);
-}
-
-function handleZoom(e) {
-	d3.select('svg g')
-		.attr('transform', e.transform);
-}
-
-function zoomIn() {
-	d3.select('svg')
-		.transition()
-		.call(zoom.scaleBy, 2);
-}
-
-function zoomOut() {
-	d3.select('svg')
-		.transition()
-		.call(zoom.scaleBy, 0.5);
-}
-
-function resetZoom() {
-	d3.select('svg')
-		.transition()
-		.call(zoom.scaleTo, 1);
-}
-
-function center() {
-	d3.select('svg')
-		.transition()
-		.call(zoom.translateTo, 0.5 * width, 0.5 * height);
-}
-
-function panLeft() {
-	d3.select('svg')
-		.transition()
-		.call(zoom.translateBy, -50, 0);
-}
-
-function panRight() {
-	d3.select('svg')
-		.transition()
-		.call(zoom.translateBy, 50, 0);
-}
+const avg_mrkt_csv = "../data/subset_data/num_markets.csv";
+const all_mrkt_csv = "../data/subset_data/city_locations.csv";
 
 var svg = d3.select("#map");
 
 svg.attr('width', width).attr('height', height)
+
+// svg.append("")
+
+// see if button was pressed to change display
+// d3.select("#avg_mrkt_btn").on("click", function() {
+//     d3.select("#avg_mrkt_btn")
+//         .style("display", "none");
+
+//     d3.select("#all_mrkt_btn")
+//         .style("display", "fill");
+//     console.log("clicked avg");
+// });
+
+// NOT WORKING!!!
+d3.select("#all_mrkt_btn").on("click", function() {
+    // console.log("clicked");
+    console.log("clicked all");
+    d3.select("#avg_mrkt_btn")
+        .attr("background", "blue")
+        // .style("display", "fill");
+    // d3.select("#all_mrkt_btn")
+    //     .style("display", "none");
+});
+
+
+window.onload = function () {
+    console.log(avg_markets);
+    setup("../data/subset_data/num_markets.csv");
+
+    // if (displayMarkets) {
+    //     console.log("displaying num markets");
+    //     setup("../data/subset_data/num_markets.csv");
+    // } else {
+    //     console.log("displaying all markets");
+    //     setup("../data/subset_data/city_locations.csv");
+    // }
+};
+
 
 const projection = d3.geoMercator()
                 .scale(300)
@@ -89,109 +65,110 @@ const colorScale = d3.scaleLinear()
     .domain([1, 205]) // FIXME - should be from 1 to the max num of markets in a 
     .range(["#3bcc00", "#cc0000"])
 
-let setup = function (dataPath) {
-    // parse the topojson file to produce the shape of each country
-    const g = svg.append('g');
+const g = svg.append('g');
 
-    return d3.json("../data/world.topojson").then(jsonData=> {
-        return d3.csv('../data/subset_data/city_locations.csv').then(function (csvData) {
-            const countries = topojson.feature(jsonData, jsonData.objects.countries);
+function displayAllMarkets() {
+    return d3.csv(all_mrkt_csv).then(function (csvData) {
+        console.log("displaying all markets");
+        // change back to original colour 
+        g.selectAll('path')
+            .attr("fill", "#c8c8c8")
 
-            g.selectAll('path')
-            .data(countries.features)
+        // add points for cities 
+        g.selectAll("circle")
+            .data(csvData)
             .enter()
-            .append("path")
-            .attr("class", "country")
-            .style("fill", (d, i) => {
-                // console.log(val)
-                // let val = csvData.find(e => e.CountryName == d.properties.name);
 
-                // if (val != undefined) {
-                //     if (d.properties.name == val.CountryName) {
-                //         return colorScale(val.NumOfMarkets);
-                //         // return "blue";
-                //     }
-                //     console.log(val.CountryName)
-                // } else {
-                //     return "#c8c8c8";
-                // }
-                return "#c8c8c8";
+        // FIXME: the dots should link to the stacked bar
+    //   .append("a").attr("xlink:href", function(d) {
+    //                  return "https://www.google.com/search?q="+d.CityName;}
+    //              )
+            .append("circle")
+            .attr("opacity", 0.5)
+            .attr("cx", function(d) {
+                return projection([d.Longitude, d.Latitude])[0];
             })
-            .attr("d", path)
-            // TODO: when clicked, will link to the stack bargraph
+            .attr("cy", function(d) {
+                return projection([d.Longitude, d.Latitude])[1];
+            })
+            .attr("r", 2)
+            .attr("fill", "red")    // FIXME colour is based on average price for the market in that current year
+            // .on('mouseover', function(event, d, i) {
+            //     d3.select(this).attr('fill', 'white');
+            //     // TO DO DISPLAY market details (avg price, name )
+            //     // Display rect on the x and y your cursor is on 
+            //     // svg.append('rect')
+            // })
+            // .on('mouseleave', function(event, d, i) {
+            //     d3.select(this).attr('fill', 'red');
+            // })
+    });
+        
+}
+
+function displayAverageMarkets() {
+
+    return d3.csv(avg_mrkt_csv).then(function (csvData) {
+        console.log("displaying average markets");
+
+        // fill the colour of the country to represent the number of markets in that country 
+        g.selectAll('path')
+            .attr("fill", (d, i) => {
+                let val = csvData.find(e => e.CountryName == d.properties.name);
+                if (val != undefined) {
+                    if (d.properties.name == val.CountryName) {
+                        return colorScale(val.NumOfMarkets);
+                    }
+                } else {
+                    return "#c8c8c8";
+                }
+            })
+            .attr("d", path);
+            // TODO: when country clicked, will link to the stack bargraph
             // .on("click", function(d){
             //     console.log(this);
             //     d3.select(this).classed("selected", true);
             // })
-            // .append("a").attr("xlink:href", function(d, i) {
-            //     console.log(d)
-            //     return "https://www.google.com/search?q="+d.properties.name;}
-            // )
-            .on("mouseover", function(d){
-                d3.select(this).classed("selected", true)
-            })
-            .on("mouseout", function(d){
-                d3.select(this).classed("selected", false)
-            })
+            // .on("mouseover", function(d){
+            //     d3.select(this).classed("selected", true)
+            // })
+            // .on("mouseout", function(d){
+            //     d3.select(this).classed("selected", false)
+            // }) 
 
-          // add points for cities 
-          g.selectAll("circle")
-          .data(csvData)
-          .enter()
+        // PROBLEMS!!! COLOUR DOESN'T GO BACK 
+        // make circles (that represent market/cities) disappear 
+        g.selectAll("circle")
+            .attr("opacity", 0)
+  
+    });
+}
 
-          // FIXME: the dots should link to the stacked bar
-          .append("a").attr("xlink:href", function(d) {
-                         return "https://www.google.com/search?q="+d.CityName;}
-                     )
-          .append("circle")
-          .attr("cx", function(d) {
-                return projection([d.Longitude, d.Latitude])[0];
-          })
-          .attr("cy", function(d) {
-                return projection([d.Longitude, d.Latitude])[1];
-          })
-          .attr("r", 2)
-          .style("fill", "red")    // colour is based on average price for the market in that current year
-          .attr("opacity", (d) => {
-                return 0.5;
-          })
-        });
+/******************************
+ *
+ *    Parent Call function
+ *
+ *****************************/
+let setup = function (dataPath) {
+    // parse the topojson file to produce the shape of each country
+    return d3.json("../data/world.topojson").then(jsonData=> {
+        if (avg_markets) {
+            console.log("displaying num markets");
+            displayAverageMarkets(avg_mrkt_csv);
+        } else {
+            console.log("displaying all markets");
+            displayAverageMarkets(all_mrkt_csv);
+        }
 
+        const countries = topojson.feature(jsonData, jsonData.objects.countries);
 
-        // return d3.csv(dataPath).then(function (csvData) {
-        //     const countries = topojson.feature(jsonData, jsonData.objects.countries);
-
-        //     g.selectAll('path')
-        //     .data(countries.features)
-        //     .enter()
-        //     .append("path")
-        //     .attr("class", "country")
-        //     .style("fill", (d, i) => {
-        //         // console.log(val)
-        //         let val = csvData.find(e => e.CountryName == d.properties.name);
-
-        //         if (val != undefined) {
-        //             if (d.properties.name == val.CountryName) {
-        //                 return colorScale(val.NumOfMarkets);
-        //                 // return "blue";
-        //             }
-        //             console.log(val.CountryName)
-        //         } else {
-        //             return "#c8c8c8";
-        //         }
-        //     })
-        //     .attr("d", path)
-        //     // TODO: when clicked, will link to the stack bargraph
-        //     // .on("click", function(d){
-        //     //     console.log(this);
-        //     //     d3.select(this).classed("selected", true);
-        //     // })
-        //     .on("mouseover", function(d){
-        //         d3.select(this).classed("selected", true)
-        //     })
-        //     .on("mouseout", function(d){
-        //         d3.select(this).classed("selected", false)
-        //     })        
+        g.selectAll('path')
+            .data(countries.features)
+            .enter()
+            .append("path")
+            .attr("class", "country")
+            .attr("fill", "#c8c8c8")
+            .attr("d", path);     
     });
 
 }

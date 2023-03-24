@@ -1,17 +1,12 @@
 #map{
     background-color: rgb(210, 235, 255);
 }
-/* 
-.country {
-    fill: #d0cfcf;
-} */
 
 path {
     stroke: rgb(64, 64, 64);
-
-    /* stroke: rgb(133, 131, 131); */
 }
 
 .selected {
     fill: #8d8d8d;
 }
+
