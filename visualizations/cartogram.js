@@ -10,7 +10,7 @@ const MARGIN = {
 let index = 0;
 
 window.onload = function () {
-    setup("../sources/num_markets.csv");
+    setup("../data/subset_data/num_markets.csv");
 };
 
 let zoom = d3.zoom()
@@ -74,8 +74,6 @@ function panRight() {
 		.call(zoom.translateBy, 50, 0);
 }
 
-
-
 var svg = d3.select("#map");
 
 svg.attr('width', width).attr('height', height)
@@ -95,8 +93,8 @@ let setup = function (dataPath) {
     // parse the topojson file to produce the shape of each country
     const g = svg.append('g');
 
-    return d3.json("../sources/world.topojson").then(jsonData=> {
-        return d3.csv('../sources/cities.csv').then(function (csvData) {
+    return d3.json("../data/world.topojson").then(jsonData=> {
+        return d3.csv('../data/subset_data/city_locations.csv').then(function (csvData) {
             const countries = topojson.feature(jsonData, jsonData.objects.countries);
 
             g.selectAll('path')
@@ -140,18 +138,23 @@ let setup = function (dataPath) {
           g.selectAll("circle")
           .data(csvData)
           .enter()
+
+          // FIXME: the dots should link to the stacked bar
           .append("a").attr("xlink:href", function(d) {
-                         return "https://www.google.com/search?q="+d.city;}
+                         return "https://www.google.com/search?q="+d.CityName;}
                      )
           .append("circle")
           .attr("cx", function(d) {
-                return projection([d.lng, d.lat])[0];
+                return projection([d.Longitude, d.Latitude])[0];
           })
           .attr("cy", function(d) {
-                return projection([d.lng, d.lat])[1];
+                return projection([d.Longitude, d.Latitude])[1];
           })
-          .attr("r", 5)
-          .style("fill", "red");
+          .attr("r", 2)
+          .style("fill", "red")    // colour is based on average price for the market in that current year
+          .attr("opacity", (d) => {
+                return 0.5;
+          })
         });
 
 
@@ -188,17 +191,7 @@ let setup = function (dataPath) {
         //     })
         //     .on("mouseout", function(d){
         //         d3.select(this).classed("selected", false)
-        //     })
-
-        //     // FIXME - need location of cities :(
-        //     .append("circle", ".pin")
-        //     .attr("stroke", "black")
-        //     .attr("r", (d)=> 5)
-        //     .attr("opacity", (d) => {
-        //         return 1;
-        //     });
-        // });
-        
+        //     })        
     });
 
 }
