@@ -93,4 +93,4 @@ def writeLocationToCsv():
     for n in not_found:
         print(n)
 
-writeLocationToCsv()
+# writeLocationToCsv()

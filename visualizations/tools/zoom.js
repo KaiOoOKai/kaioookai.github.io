@@ -1,4 +1,3 @@
-let avg_markets = true;
 
 let zoom = d3.zoom()
 	.scaleExtent([1, 5])
