@@ -15,8 +15,9 @@ const BOX_SIZE = 30;
 let index = 0;
 
 const avg_mrkt_csv = "../data/subset_data/num_markets.csv";
-const all_mrkt_csv = "../data/subset_data/city_locations.csv";
+const city_info_csv = "../data/subset_data/city_info.csv";
 const global_prices_csv = "../data/global_food_prices.csv";
+const city_prices_csv = "../data/subset_data/city_prices.csv";
 
 var svg = d3.select("#map");
 svg.attr('width', width).attr('height', height)
@@ -24,6 +25,7 @@ svg.attr('width', width).attr('height', height)
 let selectedYear = 2004;
 
 window.onload = function () {
+    
     setupCartogram();
     drawLegend();
 
@@ -54,6 +56,7 @@ window.onload = function () {
     	.append('option')
       .text(function (d) { return d; }) // text showed in the menu
       .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
 };
 
 const projection = d3.geoMercator()
@@ -63,7 +66,12 @@ const projection = d3.geoMercator()
 const path = d3.geoPath(projection);
 
 // Prepare a color palette for heat map
-const colorScale = d3.scaleLinear()
+const avgPriceScale = d3.scaleLinear()
+    .domain([0, 10])                   // FIXME - properly find max
+    .range(["#3bcc00", "#cc0000"])
+
+// Prepare a color palette for heat map
+const numMarketScale = d3.scaleLinear()
     .domain([1, 205])                   // FIXME - should be from 1 to the max num of markets in a 
     .range(["#3bcc00", "#cc0000"])
 
@@ -90,7 +98,7 @@ function drawLegend() {
     for (let i=0; i < 11; i++) {
         svg.append("rect").attr("x", 60+BOX_SIZE*i).attr("y", height-220)
             .style("fill", function(d){
-                return colorScale(20*`${i}`);
+                return numMarketScale(20*`${i}`);
             })
             .attr("height", BOX_SIZE).attr("width", BOX_SIZE)
     }
@@ -112,94 +120,94 @@ d3.select("#selection").on("change", function(d) {
     console.log(selectedYear)
     // TODO: update based on selected year
     // run the updateChart function with this selected option
+    g.selectAll("circle").remove();
+    displayAllMarkets();        // properly update the data :0
     // update(selectedOption)
 })
 
 
+let subset = [];
+
 function displayAllMarkets() {
-    let gp_subdata;
+    return d3.csv(city_info_csv).then(function (city_data) {
+        subset = city_data.filter(d=> { 
+            if(d.Year == selectedYear.toString() & d.AvgPrice !== ''){
+                return d;
+            }
+        });
 
-    return d3.csv(all_mrkt_csv).then(function (all_mrkt_data) {
-        // d3.csv(global_prices_csv).then(function (gp_data){
-            gp_subdata = gp_data.filter(gd =>  {
-                return gd.mp_year == selectedYear
-            });
-            
-    
-            console.log("displaying all markets");
-            // change back to original colour 
-            g.selectAll('path')
-                .attr("fill", "#c8c8c8")
+        console.log("displaying all markets");
+        // change back to original colour 
+        g.selectAll('path')
+            .attr("fill", "#c8c8c8")
 
-            console.log(subdata);
-            // add points for cities 
-            g.selectAll("circle")
-                .data(subdata)              // ERROR
-                // .data(all_mrkt_data)
-                .enter()
-                .append("circle");
+        // add points for cities 
+        g.selectAll("circle")
+            .data(subset)            // use SUBSET instead
+            .enter()
+            .append("circle");      // add transitions :)
 
-            g.selectAll("circle")
-                .attr("opacity", 0.5)
-                .attr("cx", function(d) {
-                    return projection([d.Longitude, d.Latitude])[0];
-                })
-                .attr("cy", function(d) {
-                    return projection([d.Longitude, d.Latitude])[1];
-                })
-                .attr("r", 2)
-                // .attr("fill", "red")    // FIXME colour is based on average price for the market in that current year
-                .attr("fill", function(d) {
-                    console.log(d);
-                })            
-                // FIXME: only darken circles when in the display all markets view
-                .on('mouseover', function(event, d, i) {
-                    // d3.select(this).attr('opacity', 1);
-                    console.log(d.CityName);
-                    toolTip()
-                    .attr("x", (event.pageX - 220))
-                    .attr("y", (event.pageY - 140))
-                    .style("opacity", 1)
-                    
-                    // Market text
-                    svg.append("text")
-                    .text(d.CityName + " market")
-                    .attr("class", "tip-text-1")
-                    .attr("x", event.pageX + MARGIN.RIGHT - 220).attr("y", event.pageY - 120)
-                    .style("font-family", "Arial").style("font-weight", 900);
-                    
-                    // Country of origin (?) i dont have in CSV :(
-                    svg.append("text")
-                    .attr("class", "tip-text-2")
-                    .text("• Country: " + d.CountryName)
-                    .attr("x", event.pageX + MARGIN.RIGHT - 215).attr("y", event.pageY - 90)
-                    .style("font-family", "Arial");
-
-                    // TODO: Average price text
-                    svg.append("text")
-                    .attr("class", "tip-text-3")
-                    .text("• Average Price: $" + "")
-                    .attr("x", event.pageX + MARGIN.RIGHT - 215).attr("y", event.pageY - 70)
-                    .style("font-family", "Arial");
-        
-                    // TO DO DISPLAY market details (avg price, name )
-
-                })
-                .on('mouseleave', function(event, d, i) {
-                    // remove content
-                    d3.selectAll(".tool-tip").remove();
-                    d3.selectAll(".tip-text-1").remove();
-                    d3.selectAll(".tip-text-2").remove();
-                    d3.selectAll(".tip-text-3").remove();
+        g.selectAll("circle")
+            .attr("opacity", 0.5)
+            .attr("cx", function(d) {
+                return projection([d.Longitude, d.Latitude])[0];
+            })
+            .attr("cy", function(d) {
+                return projection([d.Longitude, d.Latitude])[1];
+            })
+            .attr("r", 5)
+            // .attr("fill", "red")    // FIXME colour is based on average price for the market in that current year
+            .attr("fill", function(d) {
+                return avgPriceScale(d.AvgPrice);
+            })            
+            // FIXME: only darken circles when in the display all markets view
+            .on('mouseover', function(event, d, i) {
+                // d3.select(this).attr('opacity', 1);
+                console.log(d.CityName);
+                toolTip()
+                .attr("x", (event.pageX - 220))
+                .attr("y", (event.pageY - 140))
+                .style("opacity", 1)
                 
-                    // d3.select(this).attr('opacity', '0.5');
-                });
-                //            // FIXME: the dots should link to the stacked bar
-                //            .append("a").attr("xlink:href", function(d) {
-                //             return "https://www.google.com/search?q="+d.CityName;}
-                //         )
+                // Market text
+                svg.append("text")
+                .text(d.CityName + " market")
+                .attr("class", "tip-text-1")
+                .attr("x", event.pageX + MARGIN.RIGHT - 220).attr("y", event.pageY - 120)
+                .style("font-family", "Arial").style("font-weight", 900);
+                
+                // Country of origin (?) i dont have in CSV :(
+                svg.append("text")
+                .attr("class", "tip-text-2")
+                .text("• Country: " + d.CountryName)
+                .attr("x", event.pageX + MARGIN.RIGHT - 215).attr("y", event.pageY - 90)
+                .style("font-family", "Arial");
+
+                // TODO: Average price text
+                svg.append("text")
+                .attr("class", "tip-text-3")
+                .text("• Average Price: $" + parseFloat(d.AvgPrice).toFixed(2))
+                .attr("x", event.pageX + MARGIN.RIGHT - 215).attr("y", event.pageY - 70)
+                .style("font-family", "Arial");
+    
+                // TO DO DISPLAY market details (avg price, name )
+
+            })
+            .on('mouseleave', function(event, d, i) {
+                // remove content
+                d3.selectAll(".tool-tip").remove();
+                d3.selectAll(".tip-text-1").remove();
+                d3.selectAll(".tip-text-2").remove();
+                d3.selectAll(".tip-text-3").remove();
             
+                // d3.select(this).attr('opacity', '0.5');
             });
+            //            // FIXME: the dots should link to the stacked bar
+            //            .append("a").attr("xlink:href", function(d) {
+            //             return "https://www.google.com/search?q="+d.CityName;}
+            //         )
+        
+        });
     // });
 }
 
@@ -217,7 +225,7 @@ function displayAverageMarkets() {
                 let val = avg_mrkt_data.find(e => e.CountryName == d.properties.name);
                 if (val != undefined) {
                     if (d.properties.name == val.CountryName) {
-                        return colorScale(val.NumOfMarkets);
+                        return numMarketScale(val.NumOfMarkets);
                     }
                 } else {
                     return "#c8c8c8";
@@ -264,7 +272,7 @@ let setupCartogram = function () {
             displayAverageMarkets(avg_mrkt_csv);
         } else {
             console.log("displaying all markets");
-            displayAverageMarkets(all_mrkt_csv);
+            displayAverageMarkets(city_locations_csv);
         }
 
         const countries = topojson.feature(jsonData, jsonData.objects.countries);
