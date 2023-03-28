@@ -148,7 +148,14 @@ function displayAllMarkets() {
             .append("circle");      // add transitions :)
 
         g.selectAll("circle")
-            .attr("opacity", 0.5)
+            .attr("opacity", function(d) {
+                if (d.AvgPrice != 0) {
+                    return 0.5;
+                }
+                else {
+                    return 0;
+                }
+            })
             .attr("cx", function(d) {
                 return projection([d.Longitude, d.Latitude])[0];
             })
@@ -158,7 +165,7 @@ function displayAllMarkets() {
             .attr("r", 5)
             // .attr("fill", "red")    // FIXME colour is based on average price for the market in that current year
             .attr("fill", function(d) {
-                return avgPriceScale(d.AvgPrice);
+                return avgPriceScale(d.AvgPrice);  
             })            
             // FIXME: only darken circles when in the display all markets view
             .on('mouseover', function(event, d, i) {
