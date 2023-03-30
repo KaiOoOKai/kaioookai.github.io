@@ -1,0 +1,11 @@
+adm0_id,adm0_name,adm1_id,adm1_name,mkt_id,mkt_name,cm_id,cm_name,cur_id,cur_name,pt_id,pt_name,um_id,um_name,mp_month,mp_year,mp_price,mp_commoditysource
+1,Afghanistan,272,Badakhshan,266,Fayzabad,55,Bread - Retail,0,AFN,15,Retail,5,KG,1,2016,55.5,
+1,Afghanistan,272,Badakhshan,266,Fayzabad,55,Bread - Retail,0,AFN,15,Retail,5,KG,1,2017,50,
+1,Afghanistan,272,Badakhshan,266,Fayzabad,55,Bread - Retail,0,AFN,15,Retail,5,KG,1,2018,50,
+1,Afghanistan,272,Badakhshan,266,Fayzabad,55,Bread - Retail,0,AFN,15,Retail,5,KG,1,2019,50,
+1,Afghanistan,272,Badakhshan,266,Fayzabad,55,Bread - Retail,0,AFN,15,Retail,5,KG,1,2020,50,
+1,Afghanistan,272,Badakhshan,266,Fayzabad,84,Wheat - Retail,0,AFN,15,Retail,5,KG,1,2016,26.75,
+1,Afghanistan,272,Badakhshan,266,Fayzabad,84,Wheat - Retail,0,AFN,15,Retail,5,KG,1,2017,25,
+1,Afghanistan,272,Badakhshan,266,Fayzabad,84,Wheat - Retail,0,AFN,15,Retail,5,KG,1,2018,23.5,
+1,Afghanistan,272,Badakhshan,266,Fayzabad,84,Wheat - Retail,0,AFN,15,Retail,5,KG,1,2019,22.75,
+1,Afghanistan,272,Badakhshan,266,Fayzabad,84,Wheat - Retail,0,AFN,15,Retail,5,KG,1,2020,25.375,
