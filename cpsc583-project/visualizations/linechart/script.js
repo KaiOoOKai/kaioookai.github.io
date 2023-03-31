@@ -125,6 +125,37 @@ let lineGraph = function (data, svg, market) {
 
     const scale = 10;
 
+    let VertLine = svg.append('line')
+    .attr("transform","translate(150,100)")
+    .style("stroke", "black")
+    .style("stroke-width", 2)
+    .attr("x1", 0)
+    .attr("y1", 0)
+    .attr("x2", 0)
+    .attr("y2", height - MARGIN.BOTTOM);
+
+    // create a tooltip
+var tooltip = d3.select("body")
+.append("div")
+.attr("class", "tooltip")
+.style("opacity", 0);
+
+svg.on("mousemove", function() {
+debugger
+var xPos = d3.pointer(event, this);
+VertLine.attr("x1", xPos[0]-MARGIN.LEFT)
+  .attr("x2", xPos[0]-MARGIN.LEFT)
+  if (xPos >= xScale(xScale.domain()[0]) && x <= xScale(xScale.domain()[1])) {
+    // show tooltip
+    tooltip.transition()
+        .duration(200)
+        .style("opacity", .9);
+    tooltip.html("X value: " + "a")
+        .style("left", (event.pageX + 10) + "px")
+        .style("top", (event.pageY - 28) + "px");
+  }
+});
+
     let circles = chart
       .selectAll("circle")
       .data(data)

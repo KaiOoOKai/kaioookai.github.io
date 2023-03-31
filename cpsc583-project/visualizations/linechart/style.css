@@ -2,3 +2,16 @@ svg{
     height: 1080px;
     width: 1920px;
 }
+
+.vertical-line {
+  stroke: black;
+  stroke-width: 1px;
+  stroke-opacity: 0.5;
+}
+
+.tooltip {
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+}
