@@ -3,12 +3,18 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="style.css"/>
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+        <script type = "text/javascript" src="../data.js" defer></script>
+        <script type = "text/javascript" src="stackbar.js" defer></script>
     </head>
-    <body>
-        <div id="my_dataviz"></div>
 
+    <body>
+        <div id="MAIN" class="relative">
+            <svg id="SVG_CONTAINER"></svg>
+        </div>
+        <form id="myForm">
+            <fieldset id="checkbox">
+            </fieldset>
+          </form>
     </body>
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <script type = "text/javascript" src="../data.js"></script>
-    <script type = "text/javascript" src="stackbar.js"></script>
 </html>
