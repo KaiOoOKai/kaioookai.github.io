@@ -1,5 +1,7 @@
 let d3 = window.d3;
 let max = 10;
+let xScale;
+let yearsArray = [2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021];
 window.onload = function () {
   // setup("global_food_prices.csv");
   setup(global_prices_csv);
@@ -70,6 +72,7 @@ setup = function (dataPath, food, country, market) {
   
   // find the maximum value
   max = d3.max(values);
+  max = 1.1 * max;
   
   gggggg = d;
     // create a barchart object
@@ -80,11 +83,11 @@ setup = function (dataPath, food, country, market) {
 
 let lineGraph = function (data, svg, market) {
   // x scale will contain years
-  let xScale = d3
+  xScale = d3
     .scaleBand()
     //.scaleLinear()
     //.domain([2016,  2021])
-    .domain([2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021]) // TODO: adjust because we filtered from a certain year
+    .domain(yearsArray) // TODO: adjust because we filtered from a certain year
     .range([MARGIN.LEFT, width - MARGIN.RIGHT]);
 
 
@@ -141,19 +144,48 @@ var tooltip = d3.select("body")
 .style("opacity", 0);
 
 svg.on("mousemove", function() {
-debugger
+
 var xPos = d3.pointer(event, this);
-VertLine.attr("x1", xPos[0]-MARGIN.LEFT)
-  .attr("x2", xPos[0]-MARGIN.LEFT)
-  if (xPos >= xScale(xScale.domain()[0]) && x <= xScale(xScale.domain()[1])) {
-    // show tooltip
-    tooltip.transition()
-        .duration(200)
-        .style("opacity", .9);
-    tooltip.html("X value: " + "a")
-        .style("left", (event.pageX + 10) + "px")
-        .style("top", (event.pageY - 28) + "px");
-  }
+var bandIndex = Math.floor(xPos[0] / xScale.step());
+
+console.log(); // Output: "C";
+
+VertLine.attr("x1", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT)
+  .attr("x2", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT)
+  debugger
+  let theYear = xScale.domain()[bandIndex];
+  var yValues = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
+    return d.CityName;
+  });;
+   // show tooltip
+   tooltip.transition()
+   .duration(200)
+   .style("opacity", .9);
+   var yValuesPrices = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
+    return d.mp_price;
+  });;
+
+let text = "";
+
+for(let i = 0; i < yValues.length; i++)
+{
+  text += "City: " + yValues[i] + "<br>";
+  text += "Year: " + theYear + "<br>";
+  text += "Price: " + yValuesPrices[i] + "<br>";
+  text += "<br>";
+}
+
+
+
+        tooltip.html(text)
+            .style("left", (event.pageX + 10) + "px")
+            .style("top", (event.pageY - 28) + "px");
+
+   
+    // tooltip.html("Year: " + xScale.domain()[bandIndex])
+    //     .style("left", (event.pageX + 10) + "px")
+    //     .style("top", (event.pageY - 28) + "px");
+  
 });
 
     let circles = chart
