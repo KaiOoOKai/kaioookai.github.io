@@ -32,9 +32,9 @@ function csvToJSON(csv) {
 
 const csvUrl = './small.csv'; // Use relative path to the CSV file
 const csvData = [];
-
+debugger
 var csv;
-
+var sample;
 fetch(csvUrl)
   .then(response => response.text())
   .then(data => {
@@ -60,9 +60,11 @@ fetch(csvUrl)
     csv = data;
 
 var colors = ['#e41a1c','#377eb8','#4daf4a', "#F9CAC8"];
-var sample = csvToJSON(csv);
+sample = csvToJSON(csv);
 
-var subgroups = ['mp_price', 'mp_commoditysource'];
+sample = sample.filter(i => {return i.CityName == 'Aba'});
+
+var subgroups = ['Apples (red) - Retail', 'Beans - Retail'];
 
 // var dataset = (subgroups.map(function(ggg) {
 //       return sample.map(function(d) {
@@ -91,7 +93,8 @@ const xScale = d3.scaleBand()
     .domain(groups)
     .padding(0.4)
 
-var highestPrice =100;
+var highestPrice =  2;
+
 const yScale = d3.scaleLinear()
     .range([height, 0])
     .domain([0, highestPrice]);
@@ -356,8 +359,6 @@ const citiesByCountry = {
 "Dominican Republic": ['Santo Domingo', 'National Average'],
 "Egypt": ['National Average'],
 "Bangladesh": ['Dhaka'],
-
-
         };
 
 function val2(sel) {

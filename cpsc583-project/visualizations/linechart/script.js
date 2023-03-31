@@ -4,7 +4,7 @@ window.onload = function () {
   // setup("global_food_prices.csv");
   setup(global_prices_csv);
 };
-
+var gggggg;
 const MARGIN = {
   LEFT: 100,
   RIGHT: 100,
@@ -47,7 +47,7 @@ setup = function (dataPath, food, country, market) {
     //     );
     //   }
     //   }
-
+    debugger
     if (food != null && food.length != 0) {
       d = d.filter((i) => {
         return food.includes(i.FoodName);
@@ -63,20 +63,22 @@ setup = function (dataPath, food, country, market) {
         return market.includes(i.CityName);
       });
     }
-    if (food == undefined && country == undefined && market == undefined) d = [];
+    if (food == undefined || country == undefined || market == undefined) d = [];
+    else if (food.length == 0 || country.length == 0  || market.length == 0 ) d = [];
     
        var values = d.map(function(vvv) { return +vvv.mp_price; });
   
   // find the maximum value
   max = d3.max(values);
-
+  
+  gggggg = d;
     // create a barchart object
-    _lineGraph = new lineGraph(d, svg);
+    _lineGraph = new lineGraph(d, svg, market);
     _lineGraph.draw();
   });
 };
 
-let lineGraph = function (data, svg) {
+let lineGraph = function (data, svg, market) {
   // x scale will contain years
   let xScale = d3
     .scaleBand()
@@ -167,39 +169,32 @@ let lineGraph = function (data, svg) {
   var subdata = [];
 
   foodCategories.forEach(function (foodCategory) {
-    subdata = data.filter((ss) => {
+    subdata2 = data.filter((ss) => {
       return ss.FoodName == foodCategory;
     });
-    // Plot line
-    // FIXME: draw line for only a specific case like the circles
-    var line = d3
-      .line()
-      .x((d) => xScale(d.mp_year) + xScale.bandwidth() / 2)
-      .y((d) => yScale(d.mp_price))
-      .curve(d3.curveMonotoneX);
-    svg
-      .append("path")
-      .datum(subdata)
-      .attr("class", "line")
-      .attr("d", line)
-      .style("fill", "none")
-      .style("stroke", "#CC0000")
-      .style("stroke-width", "2");
-    //      .on('mouseenter', function (actual, i) {
+    market.forEach(element => {
+      subdata = subdata2.filter((ss) => {
+        return ss.CityName == element;
+      });
+      subdata.sort((a,b) => a.mp_year - b.mp_year);
+      // Plot line
+      // FIXME: draw line for only a specific case like the circles
+      var color = d3.rgb(Math.random() * 255, Math.random() * 255, Math.random() * 255);
+      var line = d3
+        .line()
+        .x((d) => xScale(d.mp_year) + xScale.bandwidth() / 2)
+        .y((d) => yScale(d.mp_price))
+        .curve(d3.curveMonotoneX);
+      svg
+        .append("path")
+        .datum(subdata)
+        .attr("class", "line")
+        .attr("d", line)
+        .style("fill", "none")
+        .style("stroke", color.toString())
+        .style("stroke-width", "2");
 
-    //           line = svg.append('line')
-    //             .attr('id', 'limit')
-    //             .attr('x1', 0)
-    //             .attr('y1', actual)
-    //             .attr('x2', width)
-    //             .attr('y2', actual)
-
-    //     });
-    // doesn't work
-    // .style("opacity", function(d) {
-    //     if (d.cm_name === "Bread - Retail" && d.adm1_name === "Badakhshan" ) { return 1; }
-    //     else { return 0; }
-    // });
+    });
   });
 };
 
