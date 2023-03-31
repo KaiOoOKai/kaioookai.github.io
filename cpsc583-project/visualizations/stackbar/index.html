@@ -9,6 +9,78 @@
     </head>
 
     <body>
+        <h4 style="width: 33%; float: left; padding-left: 3%">
+            Food type:<select
+              id="foodPicker"
+              onchange="val(this)"
+              class="selectpicker"
+              multiple
+              data-live-search="true"
+            >
+              <option>Bread - Retail</option>
+                <option>Rice (low quality) - Retail</option>
+                <option>Rice (high quality) - Retail</option>
+                <option>Meat (chicken) - Retail</option>
+                <option>Eggs - Retail</option>
+                <option>Milk - Retail</option>
+                <option>Meat (beef) - Retail</option>
+                <option>Meat (pork) - Retail</option>
+                <option>Meat (lamb) - Retail</option>
+                <option>Fish (frozen) - Retail</option>
+                <option>Carrots - Retail</option>
+                <option>Onions - Retail</option>
+                <option>Potatoes - Retail</option>
+                <option>Beans - Retail</option>
+                <option>Salt - Retail</option>
+                <option>Apples (red) - Retail</option>
+                <option>Tomatoes - Retail</option>
+                <option>Oranges - Retail</option>
+                <option>Wheat - Retail</option>
+                <option>Bread (wheat) - Retail</option>
+                <option>Oil (vegetable) - Retail</option>
+                <option>Oil (sunflower) - Retail</option>
+                <option>Sugar (white) - Retail</option>
+                <option>Cabbage - Retail</option>
+                <option>Garlic - Retail</option>
+                <option>Sugar (local) - Retail</option>
+                <option>Pasta - Retail</option>
+                <option>Cucumbers - Retail</option>
+                <option>Wheat flour (first grade) - Retail</option>
+                <option>Walnuts - Retail</option>
+                <option>Peas - Retail</option>
+                <option>Tea (black) - Retai</option>
+            </select>
+          </h4>
+          <h4 style="width: 33%; float: left; padding-left: 3%">
+            Year:<select
+              id="yearSelect"
+              onchange="val2(this)"
+              class="selectpicker"
+              multiple
+              data-live-search="true"
+            >
+                <option value="2003">2003</option>
+                <option value="2004">2004</option>
+                <option value="2005">2005</option>
+                <option value="2006">2006</option>
+                <option value="2007">2007</option>
+                <option value="2008">2008</option>
+                <option value="2009">2009</option>
+                <option value="2010">2010</option>
+                <option value="2011">2011</option>
+                <option value="2012">2012</option>
+                <option value="2013">2013</option>
+                <option value="2014">2014</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+              </select>
+              
+          </h4>
         <div id="MAIN" class="relative">
             <svg id="SVG_CONTAINER"></svg>
         </div>
@@ -17,4 +89,11 @@
             </fieldset>
           </form>
     </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link  rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/css/bootstrap-select.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/js/bootstrap-select.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </html>

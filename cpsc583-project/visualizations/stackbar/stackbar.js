@@ -14,25 +14,6 @@ const MARGIN = {
 const   width  = 2000,
         height = 800;
 
-
-let populateRadioBox = function(foodValues) {
-  const checkboxList = document.getElementById('checkbox');
-  let count = 0; // counter for number of types selected
-
-  foodValues.forEach(food => {
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.name = 'food';
-      checkbox.value = food;
-      const label = document.createElement('label');
-      label.textContent = food;
-      checkboxList.appendChild(checkbox);
-      checkboxList.appendChild(label);
-      checkboxList.appendChild(document.createElement('br'));
-      count++;
-  });
-}
-
 let setup = function (dataPath) {
 
     //defining an easy reference for out SVG Container
@@ -63,9 +44,6 @@ let stackedBarChart = function(data, svg){
 
   let foods = data.columns.slice(3);
   let market = d3.map(subset, d => d.CityName);
-
-  populateRadioBox(foods);
-
   console.log(foods);
 
   let stackData = d3.stack()
