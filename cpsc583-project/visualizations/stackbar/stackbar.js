@@ -1,7 +1,35 @@
 let d3 = window.d3;
 
+let selectedCountry = "Philippines";
+let selectedYear = 2003;
+
 window.onload = function(){
     setup(food_prices_csv);
+  
+    // Get the query string from the URL
+    var queryString = window.location.search;
+
+    // Remove the '?' character from the beginning of the query string
+    queryString = queryString.substring(1);
+
+    // Split the query string into an array of parameter-value pairs
+    var params = queryString.split('&');
+
+    // Loop through the parameter-value pairs and extract the parameter value you need
+    for (var i = 0; i < params.length; i++) {
+      var param = params[i].split('=');
+      console.log(param[1])
+      if (param[0] === 'country') {
+        selectedCountry = param[1];
+      }
+      else if (param[0] === 'year') {
+        console.log(param[1]);
+        selectedYear = param[1];
+      }
+    }
+    $("select[name=yearSelect]").selectpicker('val', selectedYear);
+
+    console.log(selectedCountry)
 };
 
 const MARGIN = {
@@ -25,13 +53,12 @@ let setup = function (dataPath) {
             //the data only exists within this scope
             let _stackedBar = new stackedBarChart(data,SVG);
         });
-
 };
 
 let stackedBarChart = function(data, svg){
   subset = data.filter(d=> { 
     // TO-DO: filter by selected year and country that was clicked on in the cartogram
-    if(d.mp_year == 2021  & d.CountryName =="Philippines"){
+    if(d.mp_year == selectedYear  & d.CountryName == selectedCountry){
       return d;
     }
   });
@@ -104,3 +131,24 @@ let stackedBarChart = function(data, svg){
     .attr("transform", "rotate(-65)");
 };
 
+// function val(sel) {
+//   d3.select("svg").remove();
+//   d3.select("#MAIN").append("svg");
+//   var opt;
+//   opts = [];
+//   var len = sel.options.length;
+//   for (var i = 0; i < len; i++) {
+//     opt = sel.options[i];
+
+//     if (opt.selected) {
+//       console.log("clicked")
+//       opts.push(opt.innerHTML);
+//     }
+//   }
+//   if(opts.length > 5){
+//     alert("Please select less than 5 food types");
+//     return
+//   }
+//   //setup("global_food_prices.csv", opts);
+//   setup(global_prices_csv, opts, opts2, opts3);
+// }

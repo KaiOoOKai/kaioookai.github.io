@@ -12,12 +12,11 @@ const MARGIN = {
 
 const BOX_SIZE = 30;
 
-let index = 0;
-
 var svg = d3.select("#map");
 svg.attr('width', width).attr('height', height)
 
 let selectedYear = 2004;
+let scaledRadius = 1;
 
 window.onload = function () {
     
@@ -59,6 +58,10 @@ const projection = d3.geoMercator()
                 .translate([width /2, height / 2 + 80]); // center the map
 
 const path = d3.geoPath(projection);
+
+const rScale = d3.scaleLinear()
+            .domain([1, 5])
+            .range([5, 1]);
 
 // Prepare a color palette for heat map
 const avgPriceScale = d3.scaleLinear()
@@ -124,6 +127,7 @@ d3.select("#selection").on("change", function(d) {
 let subset = [];
 
 function displayAllMarkets() {
+
     return d3.csv(city_info_csv).then(function (city_data) {
         subset = city_data.filter(d=> { 
             if(d.Year == selectedYear.toString() & d.AvgPrice !== ''){
@@ -157,8 +161,7 @@ function displayAllMarkets() {
             .attr("cy", function(d) {
                 return projection([d.Longitude, d.Latitude])[1];
             })
-            .attr("r", 5)
-            // .attr("fill", "red")    // FIXME colour is based on average price for the market in that current year
+            .attr("r", rScale(scaledRadius))               // FIXME, dynamically change radius by scale when zoomed in
             .attr("fill", function(d) {
                 return avgPriceScale(d.AvgPrice);  
             })            
@@ -201,13 +204,7 @@ function displayAllMarkets() {
                 d3.selectAll(".tip-text-1").remove();
                 d3.selectAll(".tip-text-2").remove();
                 d3.selectAll(".tip-text-3").remove();
-            
-                // d3.select(this).attr('opacity', '0.5');
             });
-            //            // FIXME: the dots should link to the stacked bar
-            //            .append("a").attr("xlink:href", function(d) {
-            //             return "https://www.google.com/search?q="+d.CityName;}
-            //         )
         
         });
     // });
@@ -234,15 +231,16 @@ function displayAverageMarkets() {
                 }
             })
             .attr("opacity", 0.9)
-
-        //     .append("a").attr("xlink:href", function(d) {
-        //         return "https://www.google.com/search?q="+d.CityName;}
-        // )
-            // TODO: when country clicked, will link to the stack bargraph
             .on("click", function(d){
-                // d.properties.name 
-                console.log(clicked);
-                d3.select(this).classed("selected", true);
+                // let val = avg_mrkt_data.find(e => e.CountryName == d.properties.name);
+                    d3.select(this).each(function (e) { 
+                        // if (e.properties.name == val.CountryName) {
+
+                        window.location.href = "../stackbar/index.html?country=" + e.properties.name + "&year=" + 2003;
+                    
+            //}
+        });
+                
             })
         
         // FIXME: only hover when the averages are displayed
@@ -258,6 +256,7 @@ function displayAverageMarkets() {
         }
         // make circles (that represent market/cities) disappear 
         g.selectAll("circle").attr("opacity", 0);
+        
     });
 }
 
@@ -281,6 +280,10 @@ let setupCartogram = function () {
         g.selectAll('path')
          .data(countries.features)
          .enter()
+        //  .attr("id", d=> d.CountryName)
+        //  .append("a").attr("xlink:href", function(d) {
+        //     return "../stackbar/index.html"+ d.properties.name}
+        // )
          .append("path")
          .attr("class", "country")
          .attr("fill", "#c8c8c8")
