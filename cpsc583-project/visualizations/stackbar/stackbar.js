@@ -131,24 +131,49 @@ let stackedBarChart = function(data, svg){
     .attr("transform", "rotate(-65)");
 };
 
-// function val(sel) {
-//   d3.select("svg").remove();
-//   d3.select("#MAIN").append("svg");
-//   var opt;
-//   opts = [];
-//   var len = sel.options.length;
-//   for (var i = 0; i < len; i++) {
-//     opt = sel.options[i];
+var opts = [];
+var opts2 = [];
 
-//     if (opt.selected) {
-//       console.log("clicked")
-//       opts.push(opt.innerHTML);
-//     }
-//   }
-//   if(opts.length > 5){
-//     alert("Please select less than 5 food types");
-//     return
-//   }
-//   //setup("global_food_prices.csv", opts);
-//   setup(global_prices_csv, opts, opts2, opts3);
-// }
+function val(sel) {
+  d3.select("svg").remove();
+  d3.select("#MAIN").append("svg");
+  var opt;
+  opts = [];
+  var len = sel.options.length;
+  for (var i = 0; i < len; i++) {
+    opt = sel.options[i];
+
+    if (opt.selected) {
+      console.log("clicked")
+      opts.push(opt.innerHTML);
+    }
+  }
+  // if(opts.length > 5){
+  //   alert("Please select less than 5 food types");
+  //   return
+  // }
+  //setup("global_food_prices.csv", opts);
+  setup(global_prices_csv, opts, opts2,);
+}
+
+function val2(sel) {
+  d3.select("svg").remove();
+  d3.select("#MAIN").append("svg");
+  var opt;
+  opts = [];
+  var len = sel.options.length;
+  for (var i = 0; i < len; i++) {
+    opt = sel.options[i];
+
+    if (opt.selected) {
+      console.log("clicked")
+      opts.push(opt.innerHTML);
+    }
+  }
+  if(opts.length > 5){
+    alert("Please select less than 5 food types");
+    return
+  }
+  //setup("global_food_prices.csv", opts);
+  setup(global_prices_csv, opts, opts2);
+}

@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 # read the CSV file
-data = pd.read_csv('outfile.csv')
+data = pd.read_csv('global_food_prices_cad.csv')
 
 # add missing years
 for city_food, group in data.groupby(['CityName', 'FoodName']):
@@ -24,4 +24,4 @@ for city_food, group in data.groupby(['CityName', 'FoodName']):
                 # print(data.index[-1])
 
 # save the updated data to a new CSV file
-data.to_csv('food_price_updated3.csv', index=False)
+data.to_csv('food_price_updated344.csv', index=False)
