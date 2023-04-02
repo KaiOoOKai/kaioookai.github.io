@@ -63,7 +63,7 @@ let stackedBarChart = function(data, svg){
       return d;
     }
   });
-
+debugger
   // Compute max price for our axis
   const maxPrice = d3.max(subset, function(d){return +d3.sum([d['Apples (red) - Retail'], d['Beans - Retail'], d['Bread (wheat) - Retail'], d['Bread - Retail'], d['Cabbage - Retail'], d['Carrots - Retail'], d['Cucumbers - Retail'], d['Eggs - Retail'], d['Fish (frozen) - Retail'], d['Garlic - Retail'], d['Meat (beef) - Retail'], d['Meat (chicken) - Retail'], d['Meat (lamb) - Retail'], d['Meat (pork) - Retail'], d['Milk - Retail'], d['Oil (sunflower) - Retail'], d['Oil (vegetable) - Retail'], d['Onions - Retail'], d['Oranges - Retail'], d['Pasta - Retail'], d['Peas - Retail'], d['Potatoes - Retail'], d['Rice (high quality) - Retail'], d['Rice (low quality) - Retail'], d['Salt - Retail'], d['Sugar (local) - Retail'], d['Sugar (white) - Retail'], d['Tea (black) - Retail'], d['Tomatoes - Retail'], d['Walnuts - Retail'], d['Wheat - Retail'], d['Wheat flour (first grade) - Retail']])})
 
@@ -71,6 +71,9 @@ let stackedBarChart = function(data, svg){
   // let years = d3.map(subset, function(d){return d.mp_year}).keys();
 
   let foods = data.columns.slice(3);
+  if(opts.length!=0)
+    foods = foods.filter(i => {return opts.includes(i)})
+  debugger
   let market = d3.map(subset, d => d.CityName);
   console.log(foods);
 
@@ -88,6 +91,7 @@ let stackedBarChart = function(data, svg){
 
   let color = d3.scaleOrdinal()
     .domain(['Apples (red) - Retail'], ['Beans - Retail'], ['Bread (wheat) - Retail'], ['Bread - Retail'], ['Cabbage - Retail'], ['Carrots - Retail'], ['Cucumbers - Retail'], ['Eggs - Retail'], ['Fish (frozen) - Retail'], ['Garlic - Retail'], ['Meat (beef) - Retail'], ['Meat (chicken) - Retail'], ['Meat (lamb) - Retail'], ['Meat (pork) - Retail'], ['Milk - Retail'], ['Oil (sunflower) - Retail'], ['Oil (vegetable) - Retail'], ['Onions - Retail'], ['Oranges - Retail'], ['Pasta - Retail'], ['Peas - Retail'], ['Potatoes - Retail'], ['Rice (high quality) - Retail'], ['Rice (low quality) - Retail'], ['Salt - Retail'], ['Sugar (local) - Retail'], ['Sugar (white) - Retail'], ['Tea (black) - Retail'], ['Tomatoes - Retail'], ['Walnuts - Retail'], ['Wheat - Retail'], ['Wheat flour (first grade) - Retail'])
+    //.domain(foods)
     .range(d3.schemeCategory10);
 
   //TODO: group for chart (each group represent a race)
