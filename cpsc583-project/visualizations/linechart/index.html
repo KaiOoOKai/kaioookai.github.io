@@ -18,13 +18,19 @@
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/js/bootstrap-select.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.css" integrity="sha512-MKxcSu/LDtbIYHBNAWUQwfB3iVoG9xeMCm32QV5hZ/9lFaQZJVaXfz9aFa0IZExWzCpm7OWvp9zq9gVip/nLMg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Include the noUiSlider JavaScript file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js" integrity="sha512-UOJe4paV6hYWBnS0c9GnIRH8PLm2nFK22uhfAvsTIqd3uwnWsVri1OPn5fJYdLtGY3wB11LGHJ4yPU1WFJeBYQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    
     <script>
       $("select").selectpicker();
     </script>
   </head>
 
   <body>
-    <h4 style="width: 33%; float: left; padding-left: 3%">
+    <h4  style="width: 23%; float: left;padding-left: 3%;">
       Food type:<select
         id="foodPicker"
         onchange="val(this)"
@@ -67,7 +73,7 @@
       <option>Tea (black) - Retail</option>
       </select>
     </h4>
-    <h4 style="width: 33%; float: left">
+    <h4  style="width: 23%; float: left">
       Country:<select
         id="countryPicker"
         onchange="val2(this)"
@@ -175,7 +181,7 @@
         <option>Zimbabwe</option>
       </select>
     </h4>
-    <h4 style="width: 33%; float: left">
+    <h4 style="width: 23%; float: left">
       City:
       <select
         id="marketPicker"
@@ -186,11 +192,43 @@
       >
         <option>Fayzabad</option>
       </select>
+      
     </h4>
+    <h4 style="width: 23%; float: left">
+      <div id="slider"></div>
+      <div id="year-label">Selected Years: 2003 - 2021</div>
+    </h4>
+    
 
     <div id="MAIN" class="relative">
       <svg></svg>
     </div>
+   
+    
+    <script>
+      var slider = document.getElementById('slider');
+      var label = document.getElementById('year-label');
+      noUiSlider.create(slider, {
+        start: [2003, 2021],
+        range: {
+          'min': 2003,
+          'max': 2021
+        },
+        step: 1, // Set the step interval to 1
+        connect: true
+      });
+      slider.noUiSlider.on('update', function(values, handle) {
+    startYear = parseInt(values[0]);
+    endYear = parseInt(values[1]);
+    var selectedYears = startYear + ' - ' + endYear;
+    label.innerHTML = 'Selected Years: ' + selectedYears;
+    d3.select("svg").remove();
+  d3.select("#MAIN").append("svg");
+    setup(global_prices_csv, opts, opts2, opts3);
+
+  });
+    </script>
   </body>
+  
   <!-- <script type = "text/javascript" src="data.js"></script> -->
 </html>

@@ -1,7 +1,12 @@
 let d3 = window.d3;
 let max = 10;
 let xScale;
+let startYear = 2003;
+let endYear = 2021;
 let yearsArray = [2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021];
+let filteredYears = yearsArray.filter(function(year) {
+  return year >= startYear && year <= endYear;
+});
 window.onload = function () {
   // setup("global_food_prices.csv");
   setup(global_prices_csv);
@@ -49,7 +54,15 @@ setup = function (dataPath, food, country, market) {
     //     );
     //   }
     //   }
-    debugger
+
+    filteredYears = yearsArray.filter(function(year) {
+      return year >= startYear && year <= endYear;
+    });
+
+    d = d.filter((i) => {
+      return i.mp_year <= endYear && i.mp_year >= startYear;
+    });
+
     if (food != null && food.length != 0) {
       d = d.filter((i) => {
         return food.includes(i.FoodName);
@@ -87,7 +100,7 @@ let lineGraph = function (data, svg, market) {
     .scaleBand()
     //.scaleLinear()
     //.domain([2016,  2021])
-    .domain(yearsArray) // TODO: adjust because we filtered from a certain year
+    .domain(filteredYears) // TODO: adjust because we filtered from a certain year
     .range([MARGIN.LEFT, width - MARGIN.RIGHT]);
 
 
@@ -165,12 +178,17 @@ VertLine.attr("x1", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT)
     return d.mp_price;
   });;
 
+  var yValuesFoods = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
+    return d.FoodName;
+  });;
+
 let text = "";
 
 for(let i = 0; i < yValues.length; i++)
 {
   text += "City: " + yValues[i] + "<br>";
   text += "Year: " + theYear + "<br>";
+  text += "Food: " + yValuesFoods[i] + "<br>";
   text += "Price: " + yValuesPrices[i] + "<br>";
   text += "<br>";
 }
@@ -232,6 +250,9 @@ for(let i = 0; i < yValues.length; i++)
   var subdata = [];
 
   foodCategories.forEach(function (foodCategory) {
+    data = data.filter((i) => {
+      return i.mp_year <= endYear && i.mp_year >= startYear;
+    });
     subdata2 = data.filter((ss) => {
       return ss.FoodName == foodCategory;
     });
@@ -282,7 +303,6 @@ function val(sel) {
   //setup("global_food_prices.csv", opts);
   setup(global_prices_csv, opts, opts2, opts3);
 }
-
 const citiesByCountry = {
 "Philippines": ['Apayao', 'Misamis Oriental', 'Cabanatuan', 'Sulu', 'Palawan', 'Northern Samar', 'Camarines Sur', 'Siquijor', 'Lanao del Sur', 'Tacloban', 'Kidapawan', 'San Fernando', 'Laguna', 'Davao del Sur', 'Zamboanga', 'Capiz', 'Pampanga', 'Tarlac', 'Agusan del Norte', 'Batangas', 'Isabela', 'Guimaras', 'Zamboanga del Sur', 'Sorsogon', 'Bataan', 'Tandag', 'Basilan', 'Zamboanga del Norte', 'Ifugao', 'Davao del Norte', 'Romblon', 'Davao de Oro', 'Agusan del Sur', 'Benguet', 'Iloilo', 'Cagayan de Oro', 'Camiguin', 'Mountain Province', 'Baguio', 'Legazpi', 'Eastern Samar', 'Ilocos Norte', 'Negros Occidental', 'La Union (Ilocos Region)', 'Bukidnon', 'Rizal', 'Zamboanga Sibugay', 'Cebu', 'Quirino', 'Quezon', 'Misamis Occidental', 'Puerto Princesa', 'Tubod', 'Lingayen', 'Davao Oriental', 'Butuan', 'Marinduque', 'Catarman', 'Bulacan', 'Negros Oriental', 'Cotabato', 'Cavite', 'Zambales', 'Sarangani', 'Pangasinan', 'Kalinga', 'Davao', 'Metro Manila', 'Sultan Kudarat', 'Tuguegarao', 'Surigao del Norte', 'Ilocos Sur', 'Camarines Norte', 'Koronadal', 'South Cotabato', 'La Trinidad', 'Naga', 'Surigao del Sur', 'Leyte', 'Palayan', 'Nueva Ecija', 'Oriental Mindoro', 'Maguindanao', 'Masbate', 'Santa Cruz', 'Calapan', 'Aklan', 'Aurora', 'Lanao del Norte', 'Shariff Aguak', 'Bohol', 'Abra', 'Catanduanes', 'Albay', 'Cagayan', 'Nueva Vizcaya', 'Antique', 'Occidental Mindoro'],
 "Lebanon": ['Zahle', 'Saida', 'Sour', 'Baalbeck', 'El Metn', 'West Beqaa', 'Bint Jbeil', 'Nabatiyeh', 'Akkar', 'Tripoli', 'Zgharta', 'Hasbaya', 'Aley', 'Rashaya', 'Bechare', 'Baabda', 'Jezzine', 'Marjayoun', 'Chouf', 'Koura', 'Beirut', 'Jbeil', 'Minieh-Dannieh', 'Batroun', 'Keserwan', 'Hermel'],
@@ -362,7 +382,7 @@ const citiesByCountry = {
 
 
 		};
-
+  
 function val2(sel) {
   debugger
   const country = document.getElementById("countryPicker").value;

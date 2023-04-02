@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Year Range Selector</title>
+     <!-- Include the noUiSlider CSS file -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.css" integrity="sha512-MKxcSu/LDtbIYHBNAWUQwfB3iVoG9xeMCm32QV5hZ/9lFaQZJVaXfz9aFa0IZExWzCpm7OWvp9zq9gVip/nLMg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Include the noUiSlider JavaScript file -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js" integrity="sha512-UOJe4paV6hYWBnS0c9GnIRH8PLm2nFK22uhfAvsTIqd3uwnWsVri1OPn5fJYdLtGY3wB11LGHJ4yPU1WFJeBYQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <div id="slider"></div>
+    <div id="year-label">Selected Years: 2003 - 2021</div>
+    
+    <script>
+      var slider = document.getElementById('slider');
+      var label = document.getElementById('year-label');
+      noUiSlider.create(slider, {
+        start: [2003, 2021],
+        range: {
+          'min': 2003,
+          'max': 2021
+        },
+        step: 1, // Set the step interval to 1
+        connect: true
+      });
+      slider.noUiSlider.on('update', function(values, handle) {
+    var startYear = parseInt(values[0]);
+    var endYear = parseInt(values[1]);
+    var selectedYears = startYear + ' - ' + endYear;
+    label.innerHTML = 'Selected Years: ' + selectedYears;
+  });
+    </script>
+
+</body>
+</html>
