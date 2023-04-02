@@ -2,7 +2,8 @@ let d3 = window.d3;
 
 let selectedCountry = "Philippines";
 let selectedYear = 2003;
-
+var opts = [];
+var opts2 = [];
 window.onload = function(){
     setup(food_prices_csv);
   
@@ -42,7 +43,7 @@ const MARGIN = {
 const   width  = 2000,
         height = 800;
 
-let setup = function (dataPath) {
+let setup = function (dataPath, opts, opts2) {
 
     //defining an easy reference for out SVG Container
     var SVG = d3.select("#SVG_CONTAINER");
@@ -131,8 +132,7 @@ let stackedBarChart = function(data, svg){
     .attr("transform", "rotate(-65)");
 };
 
-var opts = [];
-var opts2 = [];
+
 
 function val(sel) {
   d3.select("svg").remove();
@@ -153,7 +153,7 @@ function val(sel) {
   //   return
   // }
   //setup("global_food_prices.csv", opts);
-  setup(global_prices_csv, opts, opts2,);
+  setup(food_prices_csv, opts, opts2);
 }
 
 function val2(sel) {
@@ -175,5 +175,5 @@ function val2(sel) {
     return
   }
   //setup("global_food_prices.csv", opts);
-  setup(global_prices_csv, opts, opts2);
+  setup(food_prices_csv, opts, opts2);
 }
