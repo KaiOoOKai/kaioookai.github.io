@@ -1,6 +1,6 @@
 
 let avg_markets = true;
-let buttonName = "View average prices";
+let title = "Viewing the number of markets in each country";
 
 const   width  = 1900,
         height = 900;
@@ -24,14 +24,20 @@ window.onload = function () {
     setupCartogram();
     drawLegend("Num of Markets", 10);
 
+
     // checks for when we click the  "Display All Markets" button
     d3.select("#all_mrkt_btn").on("click", function() {
         d3.select("#avg_mrkt_btn").style("display", "inline-block").attr("margin-right", "200px");   // make "Display Average Markets" button appear              
-        d3.select("#all_mrkt_btn").style("display", "none");    // make "Display All Markets" button disappear
+        d3.select("#all_mrkt_btn").style("display", "none");                                         // make "Display All Markets" button disappear
         d3.select("#selectYear").style("display", "inline-block").attr("margin-right", "200px");     // make "Year Selection" appear              
         
         avg_markets = false;
         drawLegend("Avg Food Prices (CAD)", 10);
+        // selectedYear = d3.select(this).property("value");
+        title = "Average Prices in " + selectedYear;
+        d3.select("#title").html(title);
+
+
     });
 
     // checks for when we click the "Display Average Markets" button
@@ -42,6 +48,9 @@ window.onload = function () {
         
         avg_markets = true;
         drawLegend("Num of Markets", 10);
+        title = "Number of Markets in Each Region";
+        d3.select("#title").html(title);
+
     });
 
     let years = [2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 
@@ -137,6 +146,8 @@ d3.select("#selection").on("change", function(d) {
     selectedYear = d3.select(this).property("value");
     g.selectAll("circle").remove();
     displayAllMarkets();        // properly update the data :0
+    title = "Average Prices in " + selectedYear;
+    d3.select("#title").html(title);
 })
 
 
