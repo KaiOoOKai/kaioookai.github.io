@@ -33,7 +33,6 @@ window.onload = function () {
         
         avg_markets = false;
         drawLegend("Avg Food Prices (CAD)", 10);
-        // selectedYear = d3.select(this).property("value");
         title = "Average Prices in " + selectedYear;
         d3.select("#title").html(title);
 
@@ -257,7 +256,7 @@ function displayAverageMarkets() {
             .attr("opacity", 0.9)
             .on("click", function(d){
                 d3.select(this).each(function (e) { 
-                    window.open("../stackbar/index.html?country=" + e.properties.name + "&year=" + selectedYear, '_blank', 'width=1200,height=900,left=800,top=100');
+                    window.open("../stackbar/index.html?country=" + e.properties.name, '_blank', 'width=1200,height=900,left=800,top=100');
                 });
             })
         

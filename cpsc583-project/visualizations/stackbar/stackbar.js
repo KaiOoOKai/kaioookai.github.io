@@ -28,6 +28,8 @@ window.onload = function(){
         $('#titleCountry').text(selectedCountry);
       }
     }
+    console.log(selectedCountry)
+    d3.select("#titleCountry").html(selectedCountry)
 };
 
 function gotoLineChart(){
@@ -43,8 +45,7 @@ let setup = function (dataPath) {
   d3.csv(dataPath)
     .then(function (data) {
         // display only first 5 foods for stacked bar
-        // - display, this range should be passed in (?)
-        foods = data.columns.slice(3, 8);
+        foods = data.columns.slice(1, 6);
         stackedBarChart(data);
     });
 };
@@ -91,18 +92,18 @@ let stackedBarChart = function(data){
     .attr("class", "tooltip")
     .style("opacity", 0.9);
   
-tooltip.append("rect")
-.attr("width", 80)
-.attr("height", 60)
-.attr("fill", "white")
-.style("opacity", 0.5);
+    tooltip.append("rect")
+    .attr("width", 80)
+    .attr("height", 60)
+    .attr("fill", "white")
+    .style("opacity", 0.5);
 
-tooltip.append("text")
-.attr("x", 15)
-.attr("dy", "1.2em")
-.style("text-anchor", "middle")
-.attr("font-size", "18px")
-.attr("font-weight", "bold");
+    tooltip.append("text")
+    .attr("x", 15)
+    .attr("dy", "1.2em")
+    .style("text-anchor", "middle")
+    .attr("font-size", "18px")
+    .attr("font-weight", "bold");
 
 
   let chart = svg.append('g')
@@ -183,7 +184,8 @@ debugger
 svg.append("text")
     .attr("class", "x-axis-label")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (width/2) + "," + (height + MARGIN.BOTTOM - 350) + ")")
+    .attr("transform", "translate(" + (width/2) + "," + (height + MARGIN.BOTTOM - 300) + ")")
+    .attr("font-size", "15px")
     .text("Years");
 
 // Create SVG element for y-axis label
@@ -194,7 +196,8 @@ svg.append("text")
     .attr("y", MARGIN.LEFT-40)
     .attr("x", 50 - (height / 2))
     .attr("dy", "1em")
-    .text("Price in CAD");
+    .attr("font-size", "15px")
+    .text("Price in CAD ($)");
     
 // Handmade legend
 if(foods_opts.length!=0){
