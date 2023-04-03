@@ -84,7 +84,7 @@ const MARGIN = {
 // const width = 1920,
 //   height = 1080;
 
-const width = 800,
+const width = 1600,
   height = 800;
 
 var _lineGraph; //define a global reference for scatter plot

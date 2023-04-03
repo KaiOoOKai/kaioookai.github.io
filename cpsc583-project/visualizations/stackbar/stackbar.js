@@ -47,7 +47,7 @@ function gotoLineChart(){
 
 const MARGIN = { "LEFT":100, "RIGHT":100, "TOP":100, "BOTTOM":200 };
 
-const   width  = 2000,
+const   width  = 1200,
         height = 800;
 
 let setup = function (dataPath) {
