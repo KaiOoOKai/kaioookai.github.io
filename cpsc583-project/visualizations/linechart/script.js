@@ -7,9 +7,70 @@ let yearsArray = [2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 20
 let filteredYears = yearsArray.filter(function(year) {
   return year >= startYear && year <= endYear;
 });
+
+
+let selectedCountry = "Afghanistan";
+let selectedCity = "Hirat";
+
+
 window.onload = function () {
   // setup("global_food_prices.csv");
   setup(global_prices_csv);
+
+   // Get the query string from the URL
+   let queryString = window.location.search;
+
+   // Remove the '?' character from the beginning of the query string
+   queryString = queryString.substring(1);
+
+   // Split the query string into an array of parameter-value pairs
+   let params = queryString.split('&');
+
+   // Loop through the parameter-value pairs and extract the parameter value you need
+   for (let i = 0; i < params.length; i++) {
+     let param = params[i].split('=');
+     if (param[0] === 'country') {
+       selectedCountry = param[1];
+     }
+     else if (param[0] === 'city') {
+      selectedCity = param[1];
+     }
+   }
+
+$("select").selectpicker();
+
+
+   $("select[name=countryPicker]").val([selectedCountry]);
+  
+ 
+   $("select[name=countryPicker]").selectpicker('refresh');
+
+   const country = document.getElementById("countryPicker").value;
+			const cityDropdown = document.getElementById("marketPicker");
+			cityDropdown.innerHTML = "<option value=''>--Select City--</option>";
+      var citiess = ['Daykundi', 'Gardez', 'Faryab', 'Khost', 'Hirat', 'Bamyan', 'Hilmand', 'Laghman', 'Nuristan', 'Nili', 'Mazar', 'Farah', 'Ghor', 'Nangarhar', 'Sar-e-Pul', 'Takhar', 'Baghlan', 'Kabul', 'Jawzjan', 'Kunar', 'Paktika', 'Kunduz', 'Zabul', 'Maidan Wardak', 'Balkh', 'Samangan', 'Nimroz', 'Jalalabad', 'Logar', 'Kapisa', 'Paktya', 'Panjsher', 'Maymana', 'Uruzgan', 'Badghis', 'Kandahar', 'Ghazni', 'Badakhshan', 'Parwan', 'Fayzabad'];
+			if (country) {
+				citiess.forEach(city => {
+					const option = document.createElement("option");
+					option.value = city;
+					option.text = city;
+					cityDropdown.appendChild(option);
+				});
+			}
+  
+  $('#marketPicker').selectpicker('refresh');
+
+  opts2 = [];
+  
+      opts2.push(selectedCountry);
+    
+  
+   //val2($("select[name=countryPicker]"));
+    // $("select[name=marketPicker]").selectpicker([selectedCity]);
+
+    // $("select[name=marketPicker]").selectpicker('refresh');
+
+ 
 };
 var gggggg;
 const MARGIN = {
@@ -176,11 +237,15 @@ VertLine.attr("x1", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT)
    .style("opacity", .9);
    var yValuesPrices = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
     return d.mp_price;
+  });
+
+  var yValuesMonths = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
+    return d.mp_month;
   });;
 
   var yValuesFoods = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
     return d.FoodName;
-  });;
+  });
 
 let text = "";
 
@@ -188,6 +253,7 @@ for(let i = 0; i < yValues.length; i++)
 {
   text += "City: " + yValues[i] + "<br>";
   text += "Year: " + theYear + "<br>";
+  text += "Month: " + yValuesMonths[i] + "<br>";
   text += "Food: " + yValuesFoods[i] + "<br>";
   text += "Price: " + yValuesPrices[i] + "<br>";
   text += "<br>";

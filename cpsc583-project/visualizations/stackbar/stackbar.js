@@ -43,6 +43,10 @@ window.onload = function(){
     $("select[name=foodPicker]").selectpicker('val2', "Cabbage - Retail");
 };
 
+function gotoLineChart(){
+  window.location.href = "../linechart/index.html?country=" + selectedCountry;
+}
+
 const MARGIN = { "LEFT":100, "RIGHT":100, "TOP":100, "BOTTOM":200 };
 
 const   width  = 2000,
@@ -95,15 +99,50 @@ let stackedBarChart = function(data){
     .domain(['Apples (red) - Retail'], ['Beans - Retail'], ['Bread (wheat) - Retail'], ['Bread - Retail'], ['Cabbage - Retail'], ['Carrots - Retail'], ['Cucumbers - Retail'], ['Eggs - Retail'], ['Fish (frozen) - Retail'], ['Garlic - Retail'], ['Meat (beef) - Retail'], ['Meat (chicken) - Retail'], ['Meat (lamb) - Retail'], ['Meat (pork) - Retail'], ['Milk - Retail'], ['Oil (sunflower) - Retail'], ['Oil (vegetable) - Retail'], ['Onions - Retail'], ['Oranges - Retail'], ['Pasta - Retail'], ['Peas - Retail'], ['Potatoes - Retail'], ['Rice (high quality) - Retail'], ['Rice (low quality) - Retail'], ['Salt - Retail'], ['Sugar (local) - Retail'], ['Sugar (white) - Retail'], ['Tea (black) - Retail'], ['Tomatoes - Retail'], ['Walnuts - Retail'], ['Wheat - Retail'], ['Wheat flour (first grade) - Retail'])
     .range(d3.schemeCategory10);
 
+    // Prep the tooltip bits, initial display is hidden
+    var tooltip = d3.select("body")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0.9);
+  
+tooltip.append("rect")
+.attr("width", 80)
+.attr("height", 60)
+.attr("fill", "white")
+.style("opacity", 0.5);
+
+tooltip.append("text")
+.attr("x", 15)
+.attr("dy", "1.2em")
+.style("text-anchor", "middle")
+.attr("font-size", "18px")
+.attr("font-weight", "bold");
+
+
   let chart = svg.append('g')
     .attr('id','chart');
+
+    var mouseover = function(d) {
+      debugger
+      tooltip.style("display", null);
+      var xPos = d3.pointer(event, this);
+      var bandIndex = Math.floor(xPos[0] / xScale.step());
+      
+      var xPosition = xPos[0] - 15;
+      var yPosition = xPos[1] - 25;
+      tooltip
+      .style("left", (xPosition) + "px")
+      .style("top", (yPosition) + "px");
+      tooltip.select("text").html("<a href='../linechart/index.html?country="+ selectedCountry+"&city="+ xScale.domain()[bandIndex] + "'>Click to see the line chart " + xScale.domain()[bandIndex] + "</a>");
+    }
 
   let food_group= chart.selectAll('g')
     .data(stackData)
     .enter()
     .append('g')
     .attr('id', d => d.key)
-    .attr('fill', d => color(d.key)); 
+    .attr('fill', d => color(d.key))
+    .on("mouseover", mouseover);
 
   // creates bars within the data
   let bars = food_group.selectAll('rect')
@@ -117,6 +156,8 @@ let stackedBarChart = function(data){
       .transition()
       .duration(1000)
       .attr('y', d => yScale(d[1])); 
+
+    
 
   let yAxis = d3.axisLeft()
     .scale(yScale);

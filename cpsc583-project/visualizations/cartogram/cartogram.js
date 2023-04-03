@@ -296,7 +296,9 @@ function displayAverageMarkets() {
             .attr("opacity", 0.9)
             .on("click", function(d){
                 d3.select(this).each(function (e) { 
-                    window.location.href = "../stackbar/index.html?country=" + e.properties.name + "&year=" + selectedYear;
+                    //window.location.href = "../stackbar/index.html?country=" + e.properties.name + "&year=" + selectedYear;
+                    window.open("../stackbar/index.html?country=" + e.properties.name + "&year=" + selectedYear, '_blank', 'width=1200,height=900,left=800,top=100');
+                    //window.open("../linechart/index.html?country=" + e.properties.name + "&year=" + selectedYear, '_blank', 'width=1200,height=900,left=0,top=100');
                 });
             })
         
