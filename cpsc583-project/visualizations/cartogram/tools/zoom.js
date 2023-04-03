@@ -15,7 +15,8 @@ function handleZoom(e) {
 	scaledRadius = e.transform.k;
 	d3.selectAll("circle")
 	.attr("r", rScale(scaledRadius))
-
+	// .style("stroke-opacity", rScale(1/scaledRadius))    // set the stroke width
+	// console.log(1/scaledRadius)
 }
 
 initZoom();

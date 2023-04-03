@@ -1,13 +1,14 @@
 
 let avg_markets = true;
+let buttonName = "View average prices";
 
-const   width  = 1850,
-        height = 875;
+const   width  = 1900,
+        height = 900;
 
 const MARGIN = {
     "LEFT":0,
-    "RIGHT":10,
-    "TOP":10,
+    "RIGHT":0,
+    "TOP":0,
     "BOTTOM":0,
 };
 
@@ -20,7 +21,7 @@ let selectedYear = 2020;
 let scaledRadius = 1;
 
 window.onload = function () {
-    
+    // drawButton();
     setupCartogram();
     drawLegend("Num of Markets", 10);
 
@@ -31,7 +32,7 @@ window.onload = function () {
         d3.select("#selectYear").style("display", "block");     // make "Year Selection" appear              
         
         avg_markets = false;
-        drawLegend("Avg Price (CAD)", 10);
+        drawLegend("Avg Food Prices (CAD)", 10);
     });
 
     // checks for when we click the "Display Average Markets" button
@@ -41,7 +42,7 @@ window.onload = function () {
         d3.select("#selectYear").style("display", "none");      // make "Year Selection" appear      
         
         avg_markets = true;
-        drawLegend("Num of Markets", 5);
+        drawLegend("Num of Markets", 10);
     });
 
     let years = [2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 
@@ -52,7 +53,7 @@ window.onload = function () {
       .selectAll('myOptions')
      	.data(years)
       .enter()
-    	.append('option')
+        .append('option')
       .text(function (d) { return d; }) // text showed in the menu
       .attr("value", function (d) { return d; }) // corresponding value returned by the button
 
@@ -66,7 +67,7 @@ const path = d3.geoPath(projection);
 
 const rScale = d3.scaleLinear()
             .domain([1, 5])
-            .range([5, 1]);
+            .range([5, 1.7]);
 
 // Prepare a color palette for heat map
 const avgPriceScale = d3.scaleLinear()
@@ -80,6 +81,44 @@ const numMarketScale = d3.scaleLinear()
 
 const g = svg.append('g');
 
+// function drawButton() {
+//     svg.append("rect")
+//     .attr("x", 0).attr("y",0)
+//     .style("fill", "grey")
+//     .attr("opacity", .98)
+//     .attr("width", width).attr("height", 65)
+//     .attr("stroke", "black");
+
+//     // Display Num Markets button
+//     svg.append("rect")
+//     .attr("x", 0).attr("y",0)
+//     .style("fill", "grey")
+//     .attr("opacity", .98)
+//     .attr("width", 160).attr("height", 65)
+//     .attr("stroke", "black");
+
+//     svg.append("text").attr("x", 35).attr("y",40)
+//     .text("Number of Markets in Each Region").style("font-family", "Arial").style("font-weight", 600).style("fill", "white")
+//     .style("font-size", "20px")
+//     .attr("alignment-baseline","middle")
+
+//     g.append("rect").attr("id", "avg-prices-btn")
+//     .attr("x", 20).attr("y",height-380)
+//     .style("fill", "white")
+//     .attr("width", 200).attr("height", 40)
+//     .attr("stroke", "black");
+
+//     g.append("text").attr("x", 35).attr("y",height-355)
+//     .text(buttonName).style("font-family", "Arial").style("font-weight", 600).style("fill", "red")
+//     .style("font-size", "15px")
+
+// }
+
+var a = d3.select('rect#avg-prices-btn');
+a.on('click', function() {
+    console.log('i was clicked');
+});
+
 function drawLegend(legendName, endRange) {
     // legend
     svg.append("rect")
@@ -89,24 +128,40 @@ function drawLegend(legendName, endRange) {
         .attr("stroke", "black");
 
     // write the label "Legend"
-    svg.append("text").attr("x", 40).attr("y", height-620).attr("id", "legend")
+    svg.append("text").attr("x", 35).attr("y", height-620).attr("id", "legend")
         .text(legendName).style("font-family", "Arial")
-        .style("font-size", "20px")
+        .style("font-size", "17px")
         .attr("alignment-baseline","middle")
     
     // Colour scale, dynamically create 10 squares to represent a gradient legend
     numMarketsRanges = ["1 to 20", "21 to 40", "41 to 60", "61 to 80", "81 to 100", "101 to 130", "131 to 150", "151 to 170", "171 to 190", "191 to 205"]
+    avgPriceRanges = ["$0 < ", "$30 <", "$60 <", "$90 <", "$120 < ", "$150 <", "$180 <", "$210 <", "$240 <", "$270 <", "$300 <"]
     for (let i=0; i < endRange; i++) {
         console.log(endRange)
-        svg.append("rect").attr("x", 60).attr("y", height-BOX_SIZE*i-430)
+        svg.append("rect").attr("x", 35).attr("y", height-BOX_SIZE*i-430)
 
         // svg.append("rect").attr("x", 60+BOX_SIZE*i).attr("y", height-220)
             .style("fill", function(d){
-                return numMarketScale(25*`${i}`);
+                if (avg_markets) {
+                    return numMarketScale(25*`${i}`);
+                }
+                else {
+                    console.log("YES")
+                    return avgPriceScale(35*`${i}`);
+                }
+                
             })
             .attr("height", BOX_SIZE).attr("width", BOX_SIZE)
     
-        svg.append("text").attr("x", 90).attr("y", height-BOX_SIZE*i-415).text(numMarketsRanges[i])
+        svg.append("text").attr("x", 75).attr("y", height-BOX_SIZE*i-415).text( ()=> {
+            if (avg_markets) {
+                return numMarketsRanges[i]
+            } else {
+                return avgPriceRanges[i]
+            }
+        }
+
+        )
         .style("font-family", "Arial").style("font-size", "13px")
     }
 }
@@ -173,7 +228,8 @@ function displayAllMarkets() {
             .attr("fill", function(d) {
                 return avgPriceScale(d.AvgPrice);  
             })            
-            // FIXME: only darken circles when in the display all markets view
+            .attr("stroke", "black")
+ 
             .on('mouseover', function(event, d, i) {
                 // d3.select(this).attr('opacity', 1);
                 console.log(d.CityName);
@@ -204,6 +260,7 @@ function displayAllMarkets() {
                 .style("font-family", "Arial");
     
                 // TO DO DISPLAY market details (avg price, name )
+                d3.select(this).attr("opacity", 1);
 
             })
             .on('mouseleave', function(event, d, i) {
@@ -212,6 +269,8 @@ function displayAllMarkets() {
                 d3.selectAll(".tip-text-1").remove();
                 d3.selectAll(".tip-text-2").remove();
                 d3.selectAll(".tip-text-3").remove();
+
+                d3.select(this).attr("opacity", 0.5);
             });
         
         });
@@ -252,8 +311,9 @@ function displayAverageMarkets() {
                 d3.select(this).attr("opacity", 0.9);
             }) 
         }
+    
         // make circles (that represent market/cities) disappear 
-        g.selectAll("circle").attr("opacity", 0);
+        g.selectAll("circle").remove();
         
     });
 }
