@@ -107,17 +107,34 @@ tooltip.append("text")
     .attr('id','chart');
 
     var mouseover = function(d) {
-      debugger
-      tooltip.style("display", null);
-      var xPos = d3.pointer(event, this);
-      var bandIndex = Math.floor(xPos[0] / xScale.step()) - 1;
+        var xPos = d3.pointer(event, this);
+      var bandIndex = Math.floor((xPos[0] - MARGIN.LEFT) / xScale.step());
       
       var xPosition = xPos[0] - 15;
       var yPosition = xPos[1] - 25;
-      tooltip
-      .style("left", (xPosition) + "px")
-      .style("top", (yPosition) + "px");
-      tooltip.select("text").html("<a href='../linechart/index.html?country="+ selectedCountry+"&city="+ xScale.domain()[bandIndex] + "'>Click to see the line chart " + xScale.domain()[bandIndex] + "</a>");
+debugger
+        // Show the tooltip
+    d3.select("#tooltip")
+    .style("visibility", "visible")
+    .html("Category: " + d.currentTarget.__data__.key + "<br>"
+              + "Value: " + d.currentTarget.__data__[bandIndex].data[d.currentTarget.__data__.key]);
+
+     // Position the tooltip
+     d3.select("#tooltip")
+     .style("left", (xPosition + 10) + "px")
+     .style("top", (yPosition + 10) + "px");
+
+      // debugger
+      // tooltip.style("display", null);
+      // var xPos = d3.pointer(event, this);
+      // var bandIndex = Math.floor(xPos[0] / xScale.step()) - 1;
+      
+      // var xPosition = xPos[0] - 15;
+      // var yPosition = xPos[1] - 25;
+      // tooltip
+      // .style("left", (xPosition) + "px")
+      // .style("top", (yPosition) + "px");
+      // tooltip.select("text").html("<a href='../linechart/index.html?country="+ selectedCountry+"&city="+ xScale.domain()[bandIndex] + "'>Click to see the line chart " + xScale.domain()[bandIndex] + "</a>");
     }
 
   let food_group= chart.selectAll('g')
