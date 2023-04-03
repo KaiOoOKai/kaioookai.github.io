@@ -158,8 +158,6 @@ debugger
       .duration(1000)
       .attr('y', d => yScale(d[1])); 
 
-    
-
   let yAxis = d3.axisLeft()
     .scale(yScale);
       chart.append("g")
