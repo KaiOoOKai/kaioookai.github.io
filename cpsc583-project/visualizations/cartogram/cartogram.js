@@ -17,7 +17,7 @@ const BOX_SIZE = 20;
 var svg = d3.select("#map");
 svg.attr('width', width).attr('height', height)
 
-let selectedYear = 2020;
+let selectedYear = 2004;
 let scaledRadius = 1;
 
 window.onload = function () {
