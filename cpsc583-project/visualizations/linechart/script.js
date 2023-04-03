@@ -81,8 +81,11 @@ const MARGIN = {
 };
 
 // dimension of our workspace
-const width = 1920,
-  height = 1080;
+// const width = 1920,
+//   height = 1080;
+
+const width = 800,
+  height = 800;
 
 var _lineGraph; //define a global reference for scatter plot
 
@@ -96,9 +99,9 @@ setup = function (dataPath, food, country, market) {
     .attr("x", width / 2 + 100)
     .attr("y", 100)
     .attr("text-anchor", "middle")
-    .style("font-family", "Helvetica")
-    .style("font-size", 76)
-    .text("Line Graph");
+    // .style("font-family", "Helvetica")
+    // .style("font-size", 76)
+    // .text("Line Graph");
 
   // Loading in our Data with D3
   d3.csv(dataPath).then(function (d) {

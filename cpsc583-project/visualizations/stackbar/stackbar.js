@@ -34,11 +34,11 @@ window.onload = function(){
     $("select[name=yearSelect]").selectpicker('val', selectedYear);
   
     // not working
-    $("select[name=foodPicker]").selectpicker('val2', "Apples (red) - Retail");
-    $("select[name=foodPicker]").selectpicker('val2', "Beans - Retail");
-    $("select[name=foodPicker]").selectpicker('val2', "Bread (wheat) - Retail");
-    $("select[name=foodPicker]").selectpicker('val2', "Bread - Retail");
-    $("select[name=foodPicker]").selectpicker('val2', "Cabbage - Retail");
+    $("select[name=foodPicker]").selectpicker('foodchange', "Apples (red) - Retail");
+    $("select[name=foodPicker]").selectpicker('foodchange', "Beans - Retail");
+    $("select[name=foodPicker]").selectpicker('foodchange', "Bread (wheat) - Retail");
+    $("select[name=foodPicker]").selectpicker('foodchange', "Bread - Retail");
+    $("select[name=foodPicker]").selectpicker('foodchange', "Cabbage - Retail");
 };
 
 function gotoLineChart(){
