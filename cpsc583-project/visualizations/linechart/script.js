@@ -1,17 +1,15 @@
 let d3 = window.d3;
 let max = 10;
 let xScale;
-let startYear = 2003;
-let endYear = 2021;
-let yearsArray = [2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021];
+let yearsArray = [2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021];
+let startYear = yearsArray[0];
+let endYear = yearsArray[-1];
 let filteredYears = yearsArray.filter(function(year) {
   return year >= startYear && year <= endYear;
 });
 
-
 let selectedCountry = "Afghanistan";
 let selectedCity = "Hirat";
-
 
 window.onload = function () {
   // setup("global_food_prices.csv");
@@ -81,6 +79,9 @@ const MARGIN = {
 };
 
 // dimension of our workspace
+// const width = 800,
+//   height = 500;
+
 const width = 1920,
   height = 1080;
 
@@ -96,9 +97,9 @@ setup = function (dataPath, food, country, market) {
     .attr("x", width / 2 + 100)
     .attr("y", 100)
     .attr("text-anchor", "middle")
-    .style("font-family", "Helvetica")
-    .style("font-size", 76)
-    .text("Line Graph");
+    .style("font-family", "Helvetica");
+    // .style("font-size", 76)
+    // .text("Line Graph");
 
   // Loading in our Data with D3
   d3.csv(dataPath).then(function (d) {
@@ -187,7 +188,7 @@ let lineGraph = function (data, svg, market) {
     var xAxis = d3
       .axisBottom()
       .scale(xScale)
-      .tickValues([2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021])
+      .tickValues([2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021])
       .ticks(5);
 
     // draw x-axis
