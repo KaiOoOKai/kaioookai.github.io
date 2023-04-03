@@ -4,13 +4,11 @@ let foods_opts = [];
 let year_opts = [];
 
 let selectedCountry = "Philippines";
-let selectedYear = 2021;
-
 let foods; 
 
 window.onload = function(){
 
-    setup(food_prices_csv); // FIXME: USE AVERAGE FOOD PRICES INSTEAD.
+    setup(food_prices_csv);
   
     // Get the query string from the URL
     let queryString = window.location.search;
@@ -27,18 +25,7 @@ window.onload = function(){
       if (param[0] === 'country') {
         selectedCountry = param[1];
       }
-      else if (param[0] === 'year') {
-        selectedYear = param[1];
-      }
     }
-    $("select[name=yearSelect]").selectpicker('val', selectedYear);
-  
-    // not working
-    $("select[name=foodPicker]").selectpicker('foodchange', "Apples (red) - Retail");
-    $("select[name=foodPicker]").selectpicker('foodchange', "Beans - Retail");
-    $("select[name=foodPicker]").selectpicker('foodchange', "Bread (wheat) - Retail");
-    $("select[name=foodPicker]").selectpicker('foodchange', "Bread - Retail");
-    $("select[name=foodPicker]").selectpicker('foodchange', "Cabbage - Retail");
 };
 
 function gotoLineChart(){
@@ -61,12 +48,11 @@ let setup = function (dataPath) {
 };
 
 let stackedBarChart = function(data){
-  console.log(selectedYear);
   console.log(foods);
   let svg = d3.select("#SVG_CONTAINER");
   subset = data.filter(d=> { 
     // filter by selected year and country that was clicked on in the cartogram
-    if(d.mp_year == selectedYear  & d.CountryName == selectedCountry){ return d; }
+    if(d.CountryName == selectedCountry){ return d; }
   });
 
   // Compute max price for given columns
@@ -197,8 +183,9 @@ if(foods_opts.length!=0){
 
 };
 
-let newfoods;
 function foodchange(sel) {
+  let newfoods;
+
   // delete old svgs
   d3.select("svg").remove();
 
@@ -226,24 +213,3 @@ function foodchange(sel) {
     stackedBarChart(data)
   });
 }
-
-// function yearchange(sel) {
-//   d3.select("svg").remove();  // delete old svgs
-//   d3.select("#MAIN").append("svg").attr("id", "SVG_CONTAINER"); // add new one for the stackedBarChart to append to
-
-//   let opt;
-//   year_opts = [];
-//   let len = sel.options.length;
-//   for (let i = 0; i < len; i++) {
-//     opt = sel.options[i];
-//     if (opt.selected) {
-//       selectedYear = opt.value;
-//       year_opts.push(opt.innerHTML);
-//     }
-//   }
-
-//   // call stackedBarChart again
-//   d3.csv(food_prices_csv).then(function (data) {
-//     stackedBarChart(data)
-//   });
-// }
