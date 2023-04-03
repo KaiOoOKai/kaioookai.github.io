@@ -16,7 +16,6 @@ function handleZoom(e) {
 	d3.selectAll("circle")
 	.attr("r", rScale(scaledRadius))
 
-	// TO-DO select a section to zoom in 
 }
 
 initZoom();

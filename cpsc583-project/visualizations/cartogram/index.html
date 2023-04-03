@@ -5,20 +5,19 @@
         <link rel="stylesheet" type="text/css" href="style.css"/>
     </head>
     <body>
+        <div id="slider"></div>
         <button style="display: none" id="avg_mrkt_btn" onclick="displayAverageMarkets()">Display Average Markets</button>
         <button id="all_mrkt_btn" onclick="displayAllMarkets()">Display All Markets</button>
         <label style="display: none" id="selectYear"> Select Year:
             <select  id="selection"></select>
         </label>
-        <div id="MAIN" class="relative">
             <svg id="map"></svg>
             
-        </div>
     </body>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="https://d3js.org/topojson.v1.min.js"></script>
     <script type = "text/javascript" src="../data.js"></script>
     <script type = "text/javascript" src="cartogram.js"></script>
     <script type = "text/javascript" src="tools/zoom.js"></script>
-
 </html>
