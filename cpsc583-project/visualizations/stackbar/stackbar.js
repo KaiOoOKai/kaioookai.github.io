@@ -124,7 +124,7 @@ tooltip.append("text")
       debugger
       tooltip.style("display", null);
       var xPos = d3.pointer(event, this);
-      var bandIndex = Math.floor(xPos[0] / xScale.step());
+      var bandIndex = Math.floor(xPos[0] / xScale.step()) - 1;
       
       var xPosition = xPos[0] - 15;
       var yPosition = xPos[1] - 25;
@@ -176,6 +176,22 @@ tooltip.append("text")
     .attr("dy", ".15em")
     .attr("transform", "rotate(-65)");
 
+// Create SVG element for x-axis label
+svg.append("text")
+    .attr("class", "x-axis-label")
+    .attr("text-anchor", "middle")
+    .attr("transform", "translate(" + (width/2) + "," + (height + MARGIN.BOTTOM - 350) + ")")
+    .text("Years");
+
+// Create SVG element for y-axis label
+svg.append("text")
+    .attr("class", "y-axis-label")
+    .attr("text-anchor", "middle")
+    .attr("transform", "rotate(-90)")
+    .attr("y", MARGIN.LEFT-40)
+    .attr("x", 50 - (height / 2))
+    .attr("dy", "1em")
+    .text("Price in CAD");
     
 // Handmade legend
 if(foods_opts.length!=0){
@@ -190,8 +206,8 @@ if(foods_opts.length!=0){
     for(let i = 0; i < foods.length; i++)
     { 
       let legendColor = color(foods[i])
-      svg.append("circle").attr("cx",200+220*i).attr("cy",50).attr("r", 6).style("fill", legendColor)
-      svg.append("text").attr("x", 220+220*i).attr("y", 50).text(foods[i]).style("font-size", "15px").attr("alignment-baseline","middle")
+      svg.append("circle").attr("cx",20+300*i).attr("cy",50).attr("r", 6).style("fill", legendColor)
+      svg.append("text").attr("x", 40+300*i).attr("y", 50).text(foods[i]).style("font-size", "15px").attr("alignment-baseline","middle")
     }
   }
 
