@@ -21,7 +21,6 @@ let selectedYear = 2004;
 let scaledRadius = 1;
 
 window.onload = function () {
-    // drawButton();
     setupCartogram();
     drawLegend("Num of Markets", 10);
 
