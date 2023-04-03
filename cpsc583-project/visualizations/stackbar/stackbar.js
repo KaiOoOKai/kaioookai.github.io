@@ -139,23 +139,22 @@ let stackedBarChart = function(data){
 
     
 // Handmade legend
-if(foods_opts.length!=0)
-{
-  for(let i = 0; i < foods_opts.length; i++)
-  { 
-    let legendColor = color(foods_opts[i])
-    svg.append("circle").attr("cx",200+150*i).attr("cy",height-120).attr("r", 6).style("fill", legendColor)
-    svg.append("text").attr("x", 220+150*i).attr("y", height-120).text(foods_opts[i]).style("font-size", "15px").attr("alignment-baseline","middle")
+if(foods_opts.length!=0){
+    for(let i = 0; i < foods_opts.length; i++)
+    { 
+      let legendColor = color(foods_opts[i])
+      svg.append("circle").attr("cx",200+150*i).attr("cy",height-120).attr("r", 6).style("fill", legendColor)
+      svg.append("text").attr("x", 220+150*i).attr("y", height-120).text(foods_opts[i]).style("font-size", "15px").attr("alignment-baseline","middle")
+    }
   }
-}
-else{
-  for(let i = 0; i < foods.length; i++)
-  { 
-    let legendColor = color(foods[i])
-    svg.append("circle").attr("cx",200+220*i).attr("cy",height-120).attr("r", 6).style("fill", legendColor)
-    svg.append("text").attr("x", 220+220*i).attr("y", height-120).text(foods[i]).style("font-size", "15px").attr("alignment-baseline","middle")
+  else{
+    for(let i = 0; i < foods.length; i++)
+    { 
+      let legendColor = color(foods[i])
+      svg.append("circle").attr("cx",200+220*i).attr("cy",height-120).attr("r", 6).style("fill", legendColor)
+      svg.append("text").attr("x", 220+220*i).attr("y", height-120).text(foods[i]).style("font-size", "15px").attr("alignment-baseline","middle")
+    }
   }
-}
 
 };
 
