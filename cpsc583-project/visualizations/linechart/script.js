@@ -37,8 +37,7 @@ window.onload = function () {
      }
    }
 
-$("select").selectpicker();
-
+   $("select").selectpicker();
 
    $("select[name=countryPicker]").val([selectedCountry]);
   
