@@ -27,9 +27,9 @@ window.onload = function () {
 
     // checks for when we click the  "Display All Markets" button
     d3.select("#all_mrkt_btn").on("click", function() {
-        d3.select("#avg_mrkt_btn").style("display", "block");   // make "Display Average Markets" button appear              
+        d3.select("#avg_mrkt_btn").style("display", "inline-block").attr("margin-right", "200px");   // make "Display Average Markets" button appear              
         d3.select("#all_mrkt_btn").style("display", "none");    // make "Display All Markets" button disappear
-        d3.select("#selectYear").style("display", "block");     // make "Year Selection" appear              
+        d3.select("#selectYear").style("display", "inline-block").attr("margin-right", "200px");     // make "Year Selection" appear              
         
         avg_markets = false;
         drawLegend("Avg Food Prices (CAD)", 10);

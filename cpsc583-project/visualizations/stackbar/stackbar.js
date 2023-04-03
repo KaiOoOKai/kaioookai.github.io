@@ -227,23 +227,23 @@ function foodchange(sel) {
   });
 }
 
-function yearchange(sel) {
-  d3.select("svg").remove();  // delete old svgs
-  d3.select("#MAIN").append("svg").attr("id", "SVG_CONTAINER"); // add new one for the stackedBarChart to append to
+// function yearchange(sel) {
+//   d3.select("svg").remove();  // delete old svgs
+//   d3.select("#MAIN").append("svg").attr("id", "SVG_CONTAINER"); // add new one for the stackedBarChart to append to
 
-  let opt;
-  year_opts = [];
-  let len = sel.options.length;
-  for (let i = 0; i < len; i++) {
-    opt = sel.options[i];
-    if (opt.selected) {
-      selectedYear = opt.value;
-      year_opts.push(opt.innerHTML);
-    }
-  }
+//   let opt;
+//   year_opts = [];
+//   let len = sel.options.length;
+//   for (let i = 0; i < len; i++) {
+//     opt = sel.options[i];
+//     if (opt.selected) {
+//       selectedYear = opt.value;
+//       year_opts.push(opt.innerHTML);
+//     }
+//   }
 
-  // call stackedBarChart again
-  d3.csv(food_prices_csv).then(function (data) {
-    stackedBarChart(data)
-  });
-}
+//   // call stackedBarChart again
+//   d3.csv(food_prices_csv).then(function (data) {
+//     stackedBarChart(data)
+//   });
+// }
