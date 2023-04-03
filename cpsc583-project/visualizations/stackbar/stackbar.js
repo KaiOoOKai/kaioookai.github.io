@@ -1,7 +1,5 @@
 let d3 = window.d3;
 
-
-
 let foods_opts = [];
 let year_opts = [];
 
@@ -12,7 +10,7 @@ let foods;
 
 window.onload = function(){
 
-    setup(food_prices_csv);
+    setup(food_prices_csv); // FIXME: USE AVERAGE FOOD PRICES INSTEAD.
   
     // Get the query string from the URL
     let queryString = window.location.search;
