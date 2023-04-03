@@ -203,6 +203,22 @@ let lineGraph = function (data, svg, market) {
       .attr("class", "xAxis")
       .call(xAxis);
 
+// Create SVG element for x-axis label
+svg.append("text")
+    .attr("class", "x-axis-label")
+    .attr("text-anchor", "middle")
+    .attr("transform", "translate(" + (width/2) + "," + (height + MARGIN.BOTTOM - 350) + ")")
+    .text("Years");
+
+// Create SVG element for y-axis label
+svg.append("text")
+    .attr("class", "y-axis-label")
+    .attr("text-anchor", "middle")
+    .attr("transform", "rotate(-90)")
+    .attr("y", MARGIN.LEFT-40)
+    .attr("x", 50 - (height / 2))
+    .attr("dy", "1em")
+    .text("Price in CAD");
     const scale = 10;
 
     let VertLine = svg.append('line')
@@ -262,16 +278,9 @@ for(let i = 0; i < yValues.length; i++)
   text += "<br>";
 }
 
-
-
         tooltip.html(text)
             .style("left", (event.pageX + 10) + "px")
             .style("top", (event.pageY - 28) + "px");
-
-   
-    // tooltip.html("Year: " + xScale.domain()[bandIndex])
-    //     .style("left", (event.pageX + 10) + "px")
-    //     .style("top", (event.pageY - 28) + "px");
   
 });
 
