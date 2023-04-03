@@ -15,7 +15,7 @@ const BOX_SIZE = 30;
 var svg = d3.select("#map");
 svg.attr('width', width).attr('height', height)
 
-let selectedYear = 2004;
+let selectedYear = 2020;
 let scaledRadius = 1;
 
 window.onload = function () {
@@ -127,7 +127,6 @@ d3.select("#selection").on("change", function(d) {
 let subset = [];
 
 function displayAllMarkets() {
-
     return d3.csv(city_info_csv).then(function (city_data) {
         subset = city_data.filter(d=> { 
             if(d.Year == selectedYear.toString() & d.AvgPrice !== ''){
@@ -216,10 +215,6 @@ function displayAverageMarkets() {
 
         // fill the colour of the country to represent the number of markets in that country 
         g.selectAll('path')
-        // .append("a").attr("xlink:href", function(d) {
-        //     console.log(d.properties.name);
-        //     return "https://www.google.com/search?q="+d.properties.name;}
-        // )
             .attr("fill", (d, i) => {
                 let val = avg_mrkt_data.find(e => e.CountryName == d.properties.name);
                 if (val != undefined) {
@@ -232,15 +227,9 @@ function displayAverageMarkets() {
             })
             .attr("opacity", 0.9)
             .on("click", function(d){
-                // let val = avg_mrkt_data.find(e => e.CountryName == d.properties.name);
-                    d3.select(this).each(function (e) { 
-                        // if (e.properties.name == val.CountryName) {
-
-                        window.location.href = "../stackbar/index.html?country=" + e.properties.name + "&year=" + 2003;
-                    
-            //}
-        });
-                
+                d3.select(this).each(function (e) { 
+                    window.location.href = "../stackbar/index.html?country=" + e.properties.name + "&year=" + selectedYear;
+                });
             })
         
         // FIXME: only hover when the averages are displayed
@@ -280,10 +269,6 @@ let setupCartogram = function () {
         g.selectAll('path')
          .data(countries.features)
          .enter()
-        //  .attr("id", d=> d.CountryName)
-        //  .append("a").attr("xlink:href", function(d) {
-        //     return "../stackbar/index.html"+ d.properties.name}
-        // )
          .append("path")
          .attr("class", "country")
          .attr("fill", "#c8c8c8")

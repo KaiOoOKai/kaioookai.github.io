@@ -14,55 +14,54 @@
         <h4 style="width: 33%; float: left; padding-left: 3%">
             Food type:<select
               id="foodPicker"
-              onchange="val(this)"
+              onchange="foodchange(this)"
               class="selectpicker"
               multiple
               data-live-search="true"
               data-max-options="5"
             >
-                <option>Bread - Retail</option>
-                <option>Rice (low quality) - Retail</option>
-                <option>Rice (high quality) - Retail</option>
-                <option>Meat (chicken) - Retail</option>
-                <option>Eggs - Retail</option>
-                <option>Milk - Retail</option>
-                <option>Meat (beef) - Retail</option>
-                <option>Meat (pork) - Retail</option>
-                <option>Meat (lamb) - Retail</option>
-                <option>Fish (frozen) - Retail</option>
-                <option>Carrots - Retail</option>
-                <option>Onions - Retail</option>
-                <option>Potatoes - Retail</option>
-                <option>Beans - Retail</option>
-                <option>Salt - Retail</option>
-                <option>Apples (red) - Retail</option>
-                <option>Tomatoes - Retail</option>
-                <option>Oranges - Retail</option>
-                <option>Wheat - Retail</option>
-                <option>Bread (wheat) - Retail</option>
-                <option>Oil (vegetable) - Retail</option>
-                <option>Oil (sunflower) - Retail</option>
-                <option>Sugar (white) - Retail</option>
-                <option>Cabbage - Retail</option>
-                <option>Garlic - Retail</option>
-                <option>Sugar (local) - Retail</option>
-                <option>Pasta - Retail</option>
-                <option>Cucumbers - Retail</option>
-                <option>Wheat flour (first grade) - Retail</option>
-                <option>Walnuts - Retail</option>
-                <option>Peas - Retail</option>
-                <option>Tea (black) - Retai</option>
+            <option>Apples (red) - Retail</option>
+            <option>Beans - Retail</option>
+            <option>Bread (wheat) - Retail</option>
+            <option>Bread - Retail</option>
+            <option>Cabbage - Retail</option>
+            <option>Carrots - Retail</option>
+            <option>Cucumbers - Retail</option>
+            <option>Eggs - Retail</option>
+            <option>Fish (frozen) - Retail</option>
+            <option>Garlic - Retail</option>
+            <option>Meat (beef) - Retail</option>
+            <option>Meat (chicken) - Retail</option>
+            <option>Meat (lamb) - Retail</option>
+            <option>Meat (pork) - Retail</option>
+            <option>Milk - Retail</option>
+            <option>Oil (sunflower) - Retail</option>
+            <option>Oil (vegetable) - Retail</option>
+            <option>Onions - Retail</option>
+            <option>Oranges - Retail</option>
+            <option>Pasta - Retail</option>
+            <option>Peas - Retail</option>
+            <option>Potatoes - Retail</option>
+            <option>Rice (high quality) - Retail</option>
+            <option>Rice (low quality) - Retail</option>
+            <option>Salt - Retail</option>
+            <option>Sugar (local) - Retail</option>
+            <option>Sugar (white) - Retail</option>
+            <option>Tea (black) - Retail</option>
+            <option>Tomatoes - Retail</option>
+            <option>Walnuts - Retail</option>
+            <option>Wheat - Retail</option>
+            <option>Wheat flour (first grade) - Retail</option>            
             </select>
           </h4>
           <h4 style="width: 33%; float: left; padding-left: 3%">
             Year:<select
               id="yearSelect"
               name="yearSelect"
-              onchange="val2(this)"
+              onchange="yearchange(this)"
               class="selectpicker"
               data-live-search="true"
             >
-                <option value="2003">2003</option>
                 <option value="2004">2004</option>
                 <option value="2005">2005</option>
                 <option value="2006">2006</option>
