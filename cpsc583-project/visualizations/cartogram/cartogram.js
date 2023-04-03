@@ -81,44 +81,6 @@ const numMarketScale = d3.scaleLinear()
 
 const g = svg.append('g');
 
-// function drawButton() {
-//     svg.append("rect")
-//     .attr("x", 0).attr("y",0)
-//     .style("fill", "grey")
-//     .attr("opacity", .98)
-//     .attr("width", width).attr("height", 65)
-//     .attr("stroke", "black");
-
-//     // Display Num Markets button
-//     svg.append("rect")
-//     .attr("x", 0).attr("y",0)
-//     .style("fill", "grey")
-//     .attr("opacity", .98)
-//     .attr("width", 160).attr("height", 65)
-//     .attr("stroke", "black");
-
-//     svg.append("text").attr("x", 35).attr("y",40)
-//     .text("Number of Markets in Each Region").style("font-family", "Arial").style("font-weight", 600).style("fill", "white")
-//     .style("font-size", "20px")
-//     .attr("alignment-baseline","middle")
-
-//     g.append("rect").attr("id", "avg-prices-btn")
-//     .attr("x", 20).attr("y",height-380)
-//     .style("fill", "white")
-//     .attr("width", 200).attr("height", 40)
-//     .attr("stroke", "black");
-
-//     g.append("text").attr("x", 35).attr("y",height-355)
-//     .text(buttonName).style("font-family", "Arial").style("font-weight", 600).style("fill", "red")
-//     .style("font-size", "15px")
-
-// }
-
-var a = d3.select('rect#avg-prices-btn');
-a.on('click', function() {
-    console.log('i was clicked');
-});
-
 function drawLegend(legendName, endRange) {
     // legend
     svg.append("rect")
@@ -146,10 +108,8 @@ function drawLegend(legendName, endRange) {
                     return numMarketScale(25*`${i}`);
                 }
                 else {
-                    console.log("YES")
                     return avgPriceScale(35*`${i}`);
                 }
-                
             })
             .attr("height", BOX_SIZE).attr("width", BOX_SIZE)
     
@@ -159,10 +119,7 @@ function drawLegend(legendName, endRange) {
             } else {
                 return avgPriceRanges[i]
             }
-        }
-
-        )
-        .style("font-family", "Arial").style("font-size", "13px")
+        }).style("font-family", "Arial").style("font-size", "13px")
     }
 }
 
@@ -179,12 +136,8 @@ var toolTip = function() {
 d3.select("#selection").on("change", function(d) {
     // recover the option that has been chosen
     selectedYear = d3.select(this).property("value");
-    console.log(selectedYear)
-    // TODO: update based on selected year
-    // run the updateChart function with this selected option
     g.selectAll("circle").remove();
     displayAllMarkets();        // properly update the data :0
-    // update(selectedOption)
 })
 
 
@@ -231,8 +184,6 @@ function displayAllMarkets() {
             .attr("stroke", "black")
  
             .on('mouseover', function(event, d, i) {
-                // d3.select(this).attr('opacity', 1);
-                console.log(d.CityName);
                 toolTip()
                 .attr("x", (event.pageX - 220))
                 .attr("y", (event.pageY - 140))
@@ -296,16 +247,11 @@ function displayAverageMarkets() {
             .attr("opacity", 0.9)
             .on("click", function(d){
                 d3.select(this).each(function (e) { 
-                    //window.location.href = "../stackbar/index.html?country=" + e.properties.name + "&year=" + selectedYear;
                     window.open("../stackbar/index.html?country=" + e.properties.name + "&year=" + selectedYear, '_blank', 'width=1200,height=900,left=800,top=100');
-                    //window.open("../linechart/index.html?country=" + e.properties.name + "&year=" + selectedYear, '_blank', 'width=1200,height=900,left=0,top=100');
                 });
             })
         
-        // FIXME: only hover when the averages are displayed
         if (avg_markets) {
-            console.log(avg_markets);
-
             g.selectAll('path').on("mouseover", function(d){
                 d3.select(this).attr("opacity", 1);
             })
@@ -329,10 +275,8 @@ let setupCartogram = function () {
     // parse the topojson file to produce the shape of each country
     return d3.json(map_json).then(jsonData=> {
         if (avg_markets) {
-            console.log("displaying num markets");
             displayAverageMarkets(avg_mrkt_csv);
         } else {
-            console.log("displaying all markets");
             displayAverageMarkets(city_locations_csv);
         }
 
@@ -345,10 +289,6 @@ let setupCartogram = function () {
          .attr("fill", "#c8c8c8")
          .attr("d", path);     
     });
-
-
-
-
 }
 
 
