@@ -1,4 +1,5 @@
-const food_prices_csv = "../../data/subset_data/food_prices.csv";
+// const food_prices_csv = "../../data/subset_data/food_prices.csv";
+const food_prices_csv = "../../data/subset_data/food_prices_avg.csv";
 const map_json = "../../data/map_data/world.topojson";
 const avg_mrkt_csv = "../../data/subset_data/num_markets.csv";
 const city_info_csv = "../../data/subset_data/city_info.csv";
