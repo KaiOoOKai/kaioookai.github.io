@@ -24,6 +24,8 @@ window.onload = function(){
       let param = params[i].split('=');
       if (param[0] === 'country') {
         selectedCountry = param[1];
+
+        $('#titleCountry').text(selectedCountry);
       }
     }
 };
