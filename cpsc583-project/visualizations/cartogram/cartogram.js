@@ -1,3 +1,4 @@
+
 let avg_markets = true;
 
 const   width  = 1850,
@@ -10,7 +11,7 @@ const MARGIN = {
     "BOTTOM":0,
 };
 
-const BOX_SIZE = 30;
+const BOX_SIZE = 20;
 
 var svg = d3.select("#map");
 svg.attr('width', width).attr('height', height)
@@ -21,14 +22,16 @@ let scaledRadius = 1;
 window.onload = function () {
     
     setupCartogram();
-    drawLegend();
+    drawLegend("Num of Markets", 10);
 
     // checks for when we click the  "Display All Markets" button
     d3.select("#all_mrkt_btn").on("click", function() {
         d3.select("#avg_mrkt_btn").style("display", "block");   // make "Display Average Markets" button appear              
         d3.select("#all_mrkt_btn").style("display", "none");    // make "Display All Markets" button disappear
         d3.select("#selectYear").style("display", "block");     // make "Year Selection" appear              
+        
         avg_markets = false;
+        drawLegend("Avg Price (CAD)", 10);
     });
 
     // checks for when we click the "Display Average Markets" button
@@ -36,7 +39,9 @@ window.onload = function () {
         d3.select("#avg_mrkt_btn").style("display", "none");    // make "Display Average Markets" button disappear   
         d3.select("#all_mrkt_btn").style("display", "block");   // make "Display All Markets" button appear
         d3.select("#selectYear").style("display", "none");      // make "Year Selection" appear      
+        
         avg_markets = true;
+        drawLegend("Num of Markets", 5);
     });
 
     let years = [2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 
@@ -65,40 +70,44 @@ const rScale = d3.scaleLinear()
 
 // Prepare a color palette for heat map
 const avgPriceScale = d3.scaleLinear()
-    .domain([0, 10])                   // FIXME - properly find max
+    .domain([0, 320])                   // MAX price (computed through excel lol)
     .range(["#3bcc00", "#cc0000"])
 
 // Prepare a color palette for heat map
 const numMarketScale = d3.scaleLinear()
-    .domain([1, 205])                   // FIXME - should be from 1 to the max num of markets in a 
+    .domain([1, 205])
     .range(["#3bcc00", "#cc0000"])
 
 const g = svg.append('g');
 
-function drawLegend() {
-        // legend
-    // POSSIBLY MOVE THIS INTO ITS OWN FUNCTION
+function drawLegend(legendName, endRange) {
+    // legend
     svg.append("rect")
-        .attr("x", 20).attr("y",height-250)
+        .attr("x", 20).attr("y",height-650)
         .style("fill", "white")
-        .attr("width", 400).attr("height", 200)
+        .attr("width", 200).attr("height", 250)
         .attr("stroke", "black");
 
     // write the label "Legend"
-    svg.append("text").attr("x", 40).attr("y", height-230)
-        .text("Legend").style("font-family", "Arial")
+    svg.append("text").attr("x", 40).attr("y", height-620).attr("id", "legend")
+        .text(legendName).style("font-family", "Arial")
         .style("font-size", "20px")
         .attr("alignment-baseline","middle")
     
     // Colour scale, dynamically create 10 squares to represent a gradient legend
-    // TO-DO: add number of markets on legend, from 1-205 markets
-    // -> 1-20, 21-40, 41-60, 61-80, 81-100, 101-130, 131-150, 151-170, 171-190, 191-205
-    for (let i=0; i < 11; i++) {
-        svg.append("rect").attr("x", 60+BOX_SIZE*i).attr("y", height-220)
+    numMarketsRanges = ["1 to 20", "21 to 40", "41 to 60", "61 to 80", "81 to 100", "101 to 130", "131 to 150", "151 to 170", "171 to 190", "191 to 205"]
+    for (let i=0; i < endRange; i++) {
+        console.log(endRange)
+        svg.append("rect").attr("x", 60).attr("y", height-BOX_SIZE*i-430)
+
+        // svg.append("rect").attr("x", 60+BOX_SIZE*i).attr("y", height-220)
             .style("fill", function(d){
-                return numMarketScale(20*`${i}`);
+                return numMarketScale(25*`${i}`);
             })
             .attr("height", BOX_SIZE).attr("width", BOX_SIZE)
+    
+        svg.append("text").attr("x", 90).attr("y", height-BOX_SIZE*i-415).text(numMarketsRanges[i])
+        .style("font-family", "Arial").style("font-size", "13px")
     }
 }
 
