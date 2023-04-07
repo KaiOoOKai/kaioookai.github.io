@@ -115,7 +115,6 @@ let stackedBarChart = function(data){
       
       var xPosition = xPos[0] - 15;
       var yPosition = xPos[1] - 25;
-debugger
         // Show the tooltip
     d3.select("#tooltip")
     .style("visibility", "visible")
@@ -200,20 +199,21 @@ svg.append("text")
     .text("Price in CAD ($)");
     
 // Handmade legend
+legendDiv = d3.select("#legend")
 if(foods_opts.length!=0){
     for(let i = 0; i < foods_opts.length; i++)
     { 
       let legendColor = color(foods_opts[i])
-      svg.append("circle").attr("cx",200+150*i).attr("cy",50).attr("r", 6).style("fill", legendColor)
-      svg.append("text").attr("x", 220+150*i).attr("y", 50).text(foods_opts[i]).style("font-size", "15px").attr("alignment-baseline","middle")
+      legendDiv.append("circle").attr("cx",10).attr("cy",20*(i+1)).attr("r", 6).style("fill", legendColor)
+      legendDiv.append("text").attr("x", 30).attr("y", 20*(i+1)).text(foods_opts[i]).style("font-size", "15px").attr("alignment-baseline","middle")
     }
   }
   else{
     for(let i = 0; i < foods.length; i++)
     { 
       let legendColor = color(foods[i])
-      svg.append("circle").attr("cx",20+300*i).attr("cy",50).attr("r", 6).style("fill", legendColor)
-      svg.append("text").attr("x", 40+300*i).attr("y", 50).text(foods[i]).style("font-size", "15px").attr("alignment-baseline","middle")
+      legendDiv.append("circle").attr("cx",10).attr("cy",20*(i+1)).attr("r", 6).style("fill", legendColor)
+      legendDiv.append("text").attr("x", 30).attr("y", 20*(i+1)).text(foods[i]).style("font-size", "15px").attr("alignment-baseline","middle")
     }
   }
 
