@@ -4,6 +4,10 @@ let xScale;
 let startYear = 2003;
 let endYear = 2021;
 let yearsArray = [2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021];
+var opts = [];
+var opts2 = [];
+var opts3 = [];
+
 let filteredYears = yearsArray.filter(function(year) {
   return year >= startYear && year <= endYear;
 });
@@ -14,8 +18,11 @@ let selectedCity = "Hirat";
 
 
 window.onload = function () {
-  // setup("global_food_prices.csv");
-  setup(global_prices_csv);
+  val(document.getElementById('foodPicker'));
+  val2(document.getElementById('countryPicker'));
+ 
+  //setup("global_food_prices.csv");
+  //setup(global_prices_csv,opts,opts2,opts3);
 
    // Get the query string from the URL
    let queryString = window.location.search;
@@ -50,9 +57,14 @@ window.onload = function () {
       var citiess = ['Daykundi', 'Gardez', 'Faryab', 'Khost', 'Hirat', 'Bamyan', 'Hilmand', 'Laghman', 'Nuristan', 'Nili', 'Mazar', 'Farah', 'Ghor', 'Nangarhar', 'Sar-e-Pul', 'Takhar', 'Baghlan', 'Kabul', 'Jawzjan', 'Kunar', 'Paktika', 'Kunduz', 'Zabul', 'Maidan Wardak', 'Balkh', 'Samangan', 'Nimroz', 'Jalalabad', 'Logar', 'Kapisa', 'Paktya', 'Panjsher', 'Maymana', 'Uruzgan', 'Badghis', 'Kandahar', 'Ghazni', 'Badakhshan', 'Parwan', 'Fayzabad'];
 			if (country) {
 				citiess.forEach(city => {
+          
 					const option = document.createElement("option");
 					option.value = city;
 					option.text = city;
+          if(city == 'Hirat')
+          {
+            option.selected = true;
+          }
 					cityDropdown.appendChild(option);
 				});
 			}
@@ -61,14 +73,8 @@ window.onload = function () {
 
   opts2 = [];
   
-      opts2.push(selectedCountry);
-    
-  
-   //val2($("select[name=countryPicker]"));
-    // $("select[name=marketPicker]").selectpicker([selectedCity]);
-
-    // $("select[name=marketPicker]").selectpicker('refresh');
-
+  opts2.push(selectedCountry);
+  val3(document.getElementById('marketPicker'));
  
 };
 var gggggg;
@@ -359,9 +365,6 @@ for(let i = 0; i < yValues.length; i++)
   });
 };
 
-var opts = [];
-var opts2 = [];
-var opts3 = [];
 
 function val(sel) {
   d3.select("svg").remove();
@@ -496,6 +499,7 @@ function val2(sel) {
 }
 
 function val3(sel) {
+  debugger
   d3.select("svg").remove();
   d3.select("#MAIN").append("svg");
   var opt;
