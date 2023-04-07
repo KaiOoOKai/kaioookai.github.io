@@ -252,7 +252,7 @@ VertLine.attr("x1", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT)
   .attr("x2", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT)
   debugger
   let theYear = xScale.domain()[bandIndex];
-  var yValues = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
+  var yValues = data.filter(function(d) { return d.mp_year == theYear && d.mp_month == 1; }).map(function(d) {
     return d.CityName;
   });;
    // show tooltip
@@ -272,14 +272,21 @@ VertLine.attr("x1", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT)
   });
 
 let text = "";
+const formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
 
+  // These options are needed to round to whole numbers if that's what you want.
+  //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+  //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+});
 for(let i = 0; i < yValues.length; i++)
 {
   text += "City: " + yValues[i] + "<br>";
   text += "Year: " + theYear + "<br>";
-  text += "Month: " + yValuesMonths[i] + "<br>";
+  //text += "Month: " + yValuesMonths[i] + "<br>";
   text += "Food: " + yValuesFoods[i] + "<br>";
-  text += "Price: " + yValuesPrices[i] + "<br>";
+  text += "Price: " + formatter.format(yValuesPrices[i]) + "<br>";
   text += "<br>";
 }
 

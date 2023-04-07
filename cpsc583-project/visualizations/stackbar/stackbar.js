@@ -115,11 +115,15 @@ let stackedBarChart = function(data){
       
       var xPosition = xPos[0] - 15;
       var yPosition = xPos[1] - 25;
+      const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+      });
         // Show the tooltip
     d3.select("#tooltip")
     .style("visibility", "visible")
     .html("Category: " + d.currentTarget.__data__.key + "<br>"
-              + "Value: " + d.currentTarget.__data__[bandIndex].data[d.currentTarget.__data__.key]);
+              + "Value: " + formatter.format(d.currentTarget.__data__[bandIndex].data[d.currentTarget.__data__.key]));
 
      // Position the tooltip
      d3.select("#tooltip")
