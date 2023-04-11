@@ -11,83 +11,63 @@
       <div id="tooltip" style="position: absolute; z-index: 9999; visibility: hidden; padding: 10px; background-color: rgba(0, 0, 0, 0.8); color: #fff; font-size: 14px; border-radius: 3px;"></div>
       <h3 style="text-align:center;"><span id="titleCountry">Philippines</span>'s Markets and Their Food Prices</h3>
         <h4 style="width: 33%; float: left; padding-left: 3%">
-            Food type:<select
-              id="foodPicker"
-              onchange="foodchange(this)"
-              class="selectpicker"
-              multiple
-              data-live-search="true"
-              data-max-options="5"
-            >
-            <option selected>Apples (red) - Retail</option>
-            <option selected>Beans - Retail</option>
-            <option selected>Bread (wheat) - Retail</option>
-            <option selected>Bread - Retail</option>
-            <option selected>Cabbage - Retail</option>
-            <option>Carrots - Retail</option>
-            <option>Cucumbers - Retail</option>
-            <option>Eggs - Retail</option>
-            <option>Fish (frozen) - Retail</option>
-            <option>Garlic - Retail</option>
-            <option>Meat (beef) - Retail</option>
-            <option>Meat (chicken) - Retail</option>
-            <option>Meat (lamb) - Retail</option>
-            <option>Meat (pork) - Retail</option>
-            <option>Milk - Retail</option>
-            <option>Oil (sunflower) - Retail</option>
-            <option>Oil (vegetable) - Retail</option>
-            <option>Onions - Retail</option>
-            <option>Oranges - Retail</option>
-            <option>Pasta - Retail</option>
-            <option>Peas - Retail</option>
-            <option>Potatoes - Retail</option>
-            <option>Rice (high quality) - Retail</option>
-            <option>Rice (low quality) - Retail</option>
-            <option>Salt - Retail</option>
-            <option>Sugar (local) - Retail</option>
-            <option>Sugar (white) - Retail</option>
-            <option>Tea (black) - Retail</option>
-            <option>Tomatoes - Retail</option>
-            <option>Walnuts - Retail</option>
-            <option>Wheat - Retail</option>
-            <option>Wheat flour (first grade) - Retail</option>            
-            </select>
-          </h4>
-
-          <!-- <h4 style="width: 28%; float: left; padding-left: 3%">
-            Year:<select
-              id="yearSelect"
-              name="yearSelect"
-              onchange="yearchange(this)"
-              class="selectpicker"
-              data-live-search="true"
-            >
-                <option value="2004">2004</option>
-                <option value="2005">2005</option>
-                <option value="2006">2006</option>
-                <option value="2007">2007</option>
-                <option value="2008">2008</option>
-                <option value="2009">2009</option>
-                <option value="2010">2010</option>
-                <option value="2011">2011</option>
-                <option value="2012">2012</option>
-                <option value="2013">2013</option>
-                <option value="2014">2014</option>
-                <option value="2015">2015</option>
-                <option value="2016">2016</option>
-                <option value="2017">2017</option>
-                <option value="2018">2018</option>
-                <option value="2019">2019</option>
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-              </select>
-          </h4> -->
+              Food type:<select
+                id="foodPicker"
+                onchange="foodchange(this)"
+                class="selectpicker"
+                multiple
+                data-live-search="true"
+                data-max-options="5"
+              >
+              <optgroup label="Vegetables">
+                <option selected>Cabbage - Retail</option>
+                <option>Carrots - Retail</option>
+                <option>Cucumbers - Retail</option>
+                <option>Garlic - Retail</option>
+                <option>Onions - Retail</option>
+                <option>Peas - Retail</option>
+                <option>Potatoes - Retail</option>
+                <option>Tomatoes - Retail</option>
+          </optgroup>
+          <optgroup label="Protein">
+                <option selected>Beans - Retail</option>
+                <option>Eggs - Retail</option>
+                <option>Fish (frozen) - Retail</option>
+                <option>Meat (beef) - Retail</option>
+                <option>Meat (chicken) - Retail</option>
+                <option>Meat (lamb) - Retail</option>
+                <option>Meat (pork) - Retail</option>
+                <option>Walnuts - Retail</option>
+          </optgroup>
+          <optgroup label="Grains">
+                <option selected>Bread (wheat) - Retail</option>
+                <option selected>Bread - Retail</option>
+                <option>Pasta - Retail</option>
+                <option>Rice (high quality) - Retail</option>
+                <option>Rice (low quality) - Retail</option>
+                <option>Wheat - Retail</option>
+                <option>Wheat flour (first grade) - Retail</option>            
+          </optgroup>
+          <optgroup label="Fruits">
+                <option selected>Apples (red) - Retail</option>
+                <option>Oranges - Retail</option>
+          </optgroup>
+          <optgroup label="Other">
+          <option>Milk - Retail</option>
+                <option>Oil (sunflower) - Retail</option>
+                <option>Oil (vegetable) - Retail</option>
+                <option>Salt - Retail</option>
+                <option>Sugar (local) - Retail</option>
+                <option>Sugar (white) - Retail</option>
+                <option>Tea (black) - Retail</option>
+          </optgroup>
+        </select>
+      </h4>
           <h4 style="width: 33%; float: left; padding-left: 3%">
           <input type="button" onclick="gotoLineChart()" value="View how food prices have changed over the years." />
           </h4>
           <div id="MAIN" class="relative">
-            <svg id="SVG_CONTAINER" style="width: 80%; float: left; padding-left: 3%"></svg>
-            <svg id="legend"></svg>
+            <svg id="SVG_CONTAINER"></svg>
         </div>
         <form id="myForm">
             <fieldset id="checkbox">

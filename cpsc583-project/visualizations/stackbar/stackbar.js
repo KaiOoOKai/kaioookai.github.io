@@ -105,12 +105,11 @@ let stackedBarChart = function(data){
     .attr("font-size", "18px")
     .attr("font-weight", "bold");
 
-
   let chart = svg.append('g')
     .attr('id','chart');
 
     var mouseover = function(d) {
-        var xPos = d3.pointer(event, this);
+      var xPos = d3.pointer(event, this);
       var bandIndex = Math.floor((xPos[0] - MARGIN.LEFT) / xScale.step());
       
       var xPosition = xPos[0] - 15;
@@ -129,18 +128,6 @@ let stackedBarChart = function(data){
      d3.select("#tooltip")
      .style("left", (xPosition + 10) + "px")
      .style("top", (yPosition + 10) + "px");
-
-      // debugger
-      // tooltip.style("display", null);
-      // var xPos = d3.pointer(event, this);
-      // var bandIndex = Math.floor(xPos[0] / xScale.step()) - 1;
-      
-      // var xPosition = xPos[0] - 15;
-      // var yPosition = xPos[1] - 25;
-      // tooltip
-      // .style("left", (xPosition) + "px")
-      // .style("top", (yPosition) + "px");
-      // tooltip.select("text").html("<a href='../linechart/index.html?country="+ selectedCountry+"&city="+ xScale.domain()[bandIndex] + "'>Click to see the line chart " + xScale.domain()[bandIndex] + "</a>");
     }
 
   let food_group= chart.selectAll('g')
@@ -163,6 +150,14 @@ let stackedBarChart = function(data){
       .transition()
       .duration(1000)
       .attr('y', d => yScale(d[1])); 
+
+  food_group.selectAll('rect')
+  .on("mouseover", function(d){
+    d3.select(this).attr("opacity", 0.8);
+  })
+  .on("mouseout", function(d){
+    d3.select(this).attr("opacity", 1);
+  })
 
   let yAxis = d3.axisLeft()
     .scale(yScale);
@@ -189,7 +184,7 @@ svg.append("text")
     .attr("text-anchor", "middle")
     .attr("transform", "translate(" + (width/2) + "," + (height + MARGIN.BOTTOM - 300) + ")")
     .attr("font-size", "15px")
-    .text("Years");
+    .text("Market Names");
 
 // Create SVG element for y-axis label
 svg.append("text")
@@ -203,21 +198,20 @@ svg.append("text")
     .text("Price in CAD ($)");
     
 // Handmade legend
-legendDiv = d3.select("#legend")
 if(foods_opts.length!=0){
     for(let i = 0; i < foods_opts.length; i++)
     { 
       let legendColor = color(foods_opts[i])
-      legendDiv.append("circle").attr("cx",10).attr("cy",20*(i+1)).attr("r", 6).style("fill", legendColor)
-      legendDiv.append("text").attr("x", 30).attr("y", 20*(i+1)).text(foods_opts[i]).style("font-size", "15px").attr("alignment-baseline","middle")
+      svg.append("circle").attr("cx",1080).attr("cy",15*(i+1)).attr("r", 6).style("fill", legendColor)
+      svg.append("text").attr("x", 1090).attr("y", 16*(i+1)).text(foods_opts[i]).style("font-size", "15px").attr("alignment-baseline","middle")
     }
   }
   else{
     for(let i = 0; i < foods.length; i++)
     { 
       let legendColor = color(foods[i])
-      legendDiv.append("circle").attr("cx",10).attr("cy",20*(i+1)).attr("r", 6).style("fill", legendColor)
-      legendDiv.append("text").attr("x", 30).attr("y", 20*(i+1)).text(foods[i]).style("font-size", "15px").attr("alignment-baseline","middle")
+      svg.append("circle").attr("cx",1080).attr("cy",15*(i+1)).attr("r", 6).style("fill", legendColor)
+      svg.append("text").attr("x", 1090).attr("y", 16*(i+1)).text(foods[i]).style("font-size", "15px").attr("alignment-baseline","middle")
     }
   }
 
