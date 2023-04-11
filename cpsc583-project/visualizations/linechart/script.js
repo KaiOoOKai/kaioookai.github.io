@@ -253,6 +253,8 @@ for(let i = 0; i < yValues.length; i++)
         tooltip.html(text)
             .style("left", (event.pageX + 10) + "px")
             .style("top", (event.pageY - 28) + "px");
+
+      
   
 });
 
@@ -292,7 +294,7 @@ for(let i = 0; i < yValues.length; i++)
  'Walnuts - Retail', 'Peas - Retail', 'Tea (black) - Retail'];
 
   var subdata = [];
-
+  var i =0;
   foodCategories.forEach(function (foodCategory) {
     data = data.filter((i) => {
       return i.mp_year <= endYear && i.mp_year >= startYear;
@@ -300,13 +302,14 @@ for(let i = 0; i < yValues.length; i++)
     subdata2 = data.filter((ss) => {
       return ss.FoodName == foodCategory;
     });
+    var color = d3.rgb(Math.random() * 255, Math.random() * 255, Math.random() * 255);
     market.forEach(element => {
       subdata = subdata2.filter((ss) => {
         return ss.CityName == element;
       });
       subdata.sort((a,b) => a.mp_year - b.mp_year);
       // Plot line
-      var color = d3.rgb(Math.random() * 255, Math.random() * 255, Math.random() * 255);
+      
       var line = d3
         .line()
         .x((d) => xScale(d.mp_year) + xScale.bandwidth() / 2)
@@ -321,6 +324,13 @@ for(let i = 0; i < yValues.length; i++)
         .style("stroke", color.toString())
         .style("stroke-width", "2");
 
+        if (subdata.length != 0 ){
+          svg.append("circle").attr("cx",1080).attr("cy",15*(i+1)).attr("r", 6).style("fill", color.toString());
+          svg.append("text").attr("x", 1090).attr("y", 16*(i+1)).text("sads").style("font-size", "15px").attr("alignment-baseline","middle");
+        }
+       
+
+        i++;
     });
   });
 };
