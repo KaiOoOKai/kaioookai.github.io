@@ -178,6 +178,8 @@ let stackedBarChart = function(data){
     .attr("dy", ".15em")
     .attr("transform", "rotate(-65)");
 
+
+
 // Create SVG element for x-axis label
 svg.append("text")
     .attr("class", "x-axis-label")

@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script type = "text/javascript" src="../data.js"></script>
+    <script type = "text/javascript" src="../../const.js"></script>
     <script type="text/javascript" src="script.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -30,6 +31,8 @@
   </head>
 
   <body>
+    <h3 style="text-align:center;"><span id="titleCity">Hirat's Food Prices Over</span><span id="range"> 17 Years</span></h3>
+
     <h4  style="width: 26%; float: left;padding-left: 3%;">
       Food type:<select
         id="foodPicker"
@@ -40,7 +43,7 @@
         data-max-options="5"
       >
       <optgroup label="Vegetables">
-        <option selected>Cabbage - Retail</option>
+        <option>Cabbage - Retail</option>
         <option>Carrots - Retail</option>
         <option>Cucumbers - Retail</option>
         <option>Garlic - Retail</option>
@@ -50,7 +53,7 @@
         <option>Tomatoes - Retail</option>
       </optgroup>
       <optgroup label="Protein">
-            <option selected>Beans - Retail</option>
+            <option>Beans - Retail</option>
             <option>Eggs - Retail</option>
             <option>Fish (frozen) - Retail</option>
             <option>Meat (beef) - Retail</option>
@@ -60,7 +63,7 @@
             <option>Walnuts - Retail</option>
       </optgroup>
       <optgroup label="Grains">
-            <option selected>Bread (wheat) - Retail</option>
+            <option>Bread (wheat) - Retail</option>
             <option selected>Bread - Retail</option>
             <option>Pasta - Retail</option>
             <option>Rice (high quality) - Retail</option>
@@ -69,7 +72,7 @@
             <option>Wheat flour (first grade) - Retail</option>            
       </optgroup>
       <optgroup label="Fruits">
-            <option selected>Apples (red) - Retail</option>
+            <option>Apples (red) - Retail</option>
             <option>Oranges - Retail</option>
       </optgroup>
       <optgroup label="Other">
@@ -83,7 +86,8 @@
       </optgroup>
     </select>
     </h4>
-    <h4  style="width: 23%; float: left">
+    
+    <h4 style="width: 23%; float: left">
       Country:<select
         id="countryPicker"
         name="countryPicker"
@@ -91,7 +95,7 @@
         class="selectpicker"
         multiple
         data-live-search="true"
-        data-max-options="5"
+        data-max-options="1"
       >
         <option selected>Afghanistan</option>
         <option>Algeria</option>
@@ -202,18 +206,18 @@
         class="selectpicker"
         multiple
         data-live-search="true"
-        data-max-options="5"
+        data-max-options="1"
       >
         <option selected>Kabul</option>
       </select>
       
     </h4>
+    
     <h4 style="width: 23%; float: left">
       <div id="slider"></div>
       <div id="year-label">Selected Years: 2003 - 2021</div>
     </h4>
     
-
     <div id="MAIN" class="relative">
       <svg></svg>
     </div>
@@ -243,6 +247,4 @@
   });
     </script>
   </body>
-  
-  <!-- <script type = "text/javascript" src="data.js"></script> -->
 </html>
