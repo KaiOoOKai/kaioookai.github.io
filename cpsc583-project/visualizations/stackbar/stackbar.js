@@ -127,9 +127,11 @@ let stackedBarChart = function(data){
         currency: 'USD',
       });
         // Show the tooltip
+        debugger
     d3.select("#tooltip")
     .style("visibility", "visible")
-    .html("Category: " + d.currentTarget.__data__.key + "<br>"
+    .html("Category: " + d.currentTarget.__data__.key + "<br>"+
+    "Market: " + d.currentTarget.__data__[bandIndex].data.CityName + "<br>"
               + "Value: " + formatter.format(d.currentTarget.__data__[bandIndex].data[d.currentTarget.__data__.key]));
 
      // Position the tooltip
