@@ -38,10 +38,13 @@ function gotoLineChart(){
 
 const MARGIN = { "LEFT":100, "RIGHT":100, "TOP":100, "BOTTOM":200 };
 
-const   width  = 1200,
-        height = 800;
+let   width  = 850,
+      height = 800;
 
 let setup = function (dataPath) {
+  
+  d3.select("#SVG_CONTAINER").attr("width", )
+
   d3.csv(dataPath)
     .then(function (data) {
         // display only first 5 foods for stacked bar
@@ -52,7 +55,6 @@ let setup = function (dataPath) {
 
 let stackedBarChart = function(data){
   console.log(foods);
-  let svg = d3.select("#SVG_CONTAINER");
   subset = data.filter(d=> { 
     // filter by selected year and country that was clicked on in the cartogram
     if(d.CountryName == selectedCountry){ return d; }
@@ -70,6 +72,12 @@ let stackedBarChart = function(data){
   })
 
   let market = d3.map(subset, d => d.CityName);
+  if (market.length > 20) {
+    width = (market.length * 40) - MARGIN.LEFT;
+  }
+
+  let svg = d3.select("#SVG_CONTAINER").attr("width", width).attr("height", 800);
+
   let stackData = d3.stack()
       .keys(foods)(subset);
 
@@ -204,16 +212,16 @@ if(foods_opts.length!=0){
     for(let i = 0; i < foods_opts.length; i++)
     { 
       let legendColor = color(foods_opts[i])
-      svg.append("circle").attr("cx",1080).attr("cy",15*(i+1)).attr("r", 6).style("fill", legendColor)
-      svg.append("text").attr("x", 1090).attr("y", 16*(i+1)).text(foods_opts[i]).style("font-size", "15px").attr("alignment-baseline","middle")
+      svg.append("circle").attr("cx",700).attr("cy",15*(i+1)).attr("r", 6).style("fill", legendColor)
+      svg.append("text").attr("x", 710).attr("y", 16*(i+1)).text(foods_opts[i]).style("font-size", "15px").attr("alignment-baseline","middle")
     }
   }
   else{
     for(let i = 0; i < foods.length; i++)
     { 
       let legendColor = color(foods[i])
-      svg.append("circle").attr("cx",1080).attr("cy",15*(i+1)).attr("r", 6).style("fill", legendColor)
-      svg.append("text").attr("x", 1090).attr("y", 16*(i+1)).text(foods[i]).style("font-size", "15px").attr("alignment-baseline","middle")
+      svg.append("circle").attr("cx",700).attr("cy",15*(i+1)).attr("r", 6).style("fill", legendColor)
+      svg.append("text").attr("x", 710).attr("y", 16*(i+1)).text(foods[i]).style("font-size", "15px").attr("alignment-baseline","middle")
     }
   }
 
