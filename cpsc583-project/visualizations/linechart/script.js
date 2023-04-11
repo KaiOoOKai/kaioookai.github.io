@@ -96,6 +96,10 @@ setup = function (dataPath, food, country, market) {
     });
 
     d = d.filter((i) => {
+      return i.mp_month ==1;
+    });
+
+    d = d.filter((i) => {
       return i.mp_year <= endYear && i.mp_year >= startYear;
     });
 
