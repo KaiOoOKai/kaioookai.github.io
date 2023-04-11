@@ -144,12 +144,20 @@ let stackedBarChart = function(data){
     .enter()
     .append('rect')
       .attr('id', d => d.data.CityName)
+      .on("click", function(d) {
+        handleClick(d);
+      })
       .attr('width', xScale.bandwidth)
       .attr('height', d => yScale(d[0]) - yScale(d[1]))
       .attr('x', d => xScale(d.data.CityName))
       .transition()
       .duration(1000)
       .attr('y', d => yScale(d[1])); 
+
+      function handleClick(id) {
+        window.location.href = "../linechart/index.html?country=" +selectedCountry+"&city="+ id.currentTarget.__data__.data.CityName;
+       ;
+    }
 
   food_group.selectAll('rect')
   .on("mouseover", function(d){

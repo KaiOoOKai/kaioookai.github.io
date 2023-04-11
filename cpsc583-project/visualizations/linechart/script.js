@@ -40,33 +40,30 @@ window.onload = function () {
    }
 
    $("select").selectpicker();
-   $("select[name=countryPicker]").val([selectedCountry]);
+   $("select[name=countryPicker]").val(selectedCountry);
    $("select[name=countryPicker]").selectpicker('refresh');
   
    const country = document.getElementById("countryPicker").value;
 			const cityDropdown = document.getElementById("marketPicker");
 			cityDropdown.innerHTML = "<option value=''>--Select City--</option>";
-      var citiess = ['Daykundi', 'Gardez', 'Faryab', 'Khost', 'Hirat', 'Bamyan', 'Hilmand', 'Laghman', 'Nuristan', 'Nili', 'Mazar', 'Farah', 'Ghor', 'Nangarhar', 'Sar-e-Pul', 'Takhar', 'Baghlan', 'Kabul', 'Jawzjan', 'Kunar', 'Paktika', 'Kunduz', 'Zabul', 'Maidan Wardak', 'Balkh', 'Samangan', 'Nimroz', 'Jalalabad', 'Logar', 'Kapisa', 'Paktya', 'Panjsher', 'Maymana', 'Uruzgan', 'Badghis', 'Kandahar', 'Ghazni', 'Badakhshan', 'Parwan', 'Fayzabad'];
 			if (country) {
-				citiess.forEach(city => {
-          
+				const cities = citiesByCountry[country];
+				cities.forEach(city => {
 					const option = document.createElement("option");
 					option.value = city;
 					option.text = city;
-          if(city == 'Hirat')
-          {
+          if(city == selectedCity)
             option.selected = true;
-          }
 					cityDropdown.appendChild(option);
 				});
 			}
-  
-  $('#marketPicker').selectpicker('refresh');
 
-  opts2 = [];
+    $('#marketPicker').selectpicker('refresh');
+
+      opts2 = [];
   
-  opts2.push(selectedCountry);
-  val3(document.getElementById('marketPicker'));
+      opts2.push(selectedCountry);
+      val3(document.getElementById('marketPicker'));
  
 };
 var gggggg;
@@ -326,12 +323,13 @@ for(let i = 0; i < yValues.length; i++)
 
         if (subdata.length != 0 ){
           svg.append("circle").attr("cx",1080).attr("cy",15*(i+1)).attr("r", 6).style("fill", color.toString());
-          svg.append("text").attr("x", 1090).attr("y", 16*(i+1)).text("sads").style("font-size", "15px").attr("alignment-baseline","middle");
+          svg.append("text").attr("x", 1090).attr("y", 16*(i+1)).text(element+": " + foodCategory).style("font-size", "15px").attr("alignment-baseline","middle");
+          i++;
         }
        
 
-        i++;
-    });
+       
+    }); 
   });
 };
 
