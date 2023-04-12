@@ -1,5 +1,5 @@
 let d3 = window.d3;
-let max = 10;
+let max = 5;
 let xScale;
 let startYear = 2003;
 let endYear = 2021;
@@ -66,7 +66,11 @@ window.onload = function () {
       val3(document.getElementById('marketPicker'));
  
 };
-var gggggg;
+
+let color = d3.scaleOrdinal()
+.domain(['Apples (red) - Retail'], ['Beans - Retail'], ['Bread (wheat) - Retail'], ['Bread - Retail'], ['Cabbage - Retail'], ['Carrots - Retail'], ['Cucumbers - Retail'], ['Eggs - Retail'], ['Fish (frozen) - Retail'], ['Garlic - Retail'], ['Meat (beef) - Retail'], ['Meat (chicken) - Retail'], ['Meat (lamb) - Retail'], ['Meat (pork) - Retail'], ['Milk - Retail'], ['Oil (sunflower) - Retail'], ['Oil (vegetable) - Retail'], ['Onions - Retail'], ['Oranges - Retail'], ['Pasta - Retail'], ['Peas - Retail'], ['Potatoes - Retail'], ['Rice (high quality) - Retail'], ['Rice (low quality) - Retail'], ['Salt - Retail'], ['Sugar (local) - Retail'], ['Sugar (white) - Retail'], ['Tea (black) - Retail'], ['Tomatoes - Retail'], ['Walnuts - Retail'], ['Wheat - Retail'], ['Wheat flour (first grade) - Retail'])
+.range(d3.schemeCategory10);
+
 const MARGIN = {
   LEFT: 100,
   RIGHT: 100,
@@ -100,7 +104,7 @@ setup = function (dataPath, food, country, market) {
     // });
   
     d = d.filter((i) => {
-      return i.mp_month ==1 && food.includes(i.FoodName) && i.mp_year <= endYear && i.mp_year >= startYear && market.includes(i.CityName) && country.includes(i.CountryName);
+      return i.mp_month == 1 && food.includes(i.FoodName) && i.mp_year <= endYear && i.mp_year >= startYear && market.includes(i.CityName) && country.includes(i.CountryName);
     });
   
     // d = d.filter((i) => {
@@ -125,19 +129,18 @@ setup = function (dataPath, food, country, market) {
     if (food == undefined || country == undefined || market == undefined) d = [];
     else if (food.length == 0 || country.length == 0  || market.length == 0 ) d = [];
     
-    var values = d.map(function(vvv) { return +vvv.mp_price; });
+    // FIXME: compute max price for the given data
+    // var values = d3.max(d, function(d) { return +d.mp_price; });
+    
+    // // find the maximum value
+    // max = 1.1 * max;
   
-  // // find the maximum value
-  // max = d3.max(values);
-  // max = 1.1 * max;
-  
-  // gggggg = d;
-  //   // create a barchart object
-  //   _lineGraph = new lineGraph(d, svg, market);
-  //   _lineGraph.draw();
+    // create a barchart object
+    _lineGraph = new lineGraph(d, svg, market);
+    _lineGraph.draw();
   });
 
-  
+
 };
 
 let lineGraph = function (data, svg, market) {
@@ -251,7 +254,7 @@ svg.append("text")
       });
       for(let i = 0; i < yValues.length; i++)
       {
-        text += "City: " + yValues[i] + "<br>";
+        // text += "City: " + yValues[i] + "<br>";
         text += "Year: " + theYear + "<br>";
         text += "Food: " + yValuesFoods[i] + "<br>";
         text += "Price: " + formatter.format(yValuesPrices[i]) + "<br>";
@@ -281,7 +284,6 @@ svg.append("text")
         return 1;
       });
   };
-  //var data = data[0];
 
   var foodCategories = ['Bread - Retail', 'Rice (low quality) - Retail', 'Rice (high quality) - Retail',
  'Meat (chicken) - Retail', 'Eggs - Retail', 'Milk - Retail', 'Meat (beef) - Retail',
@@ -302,14 +304,13 @@ svg.append("text")
     subdata2 = data.filter((ss) => {
       return ss.FoodName == foodCategory;
     });
-    var color = d3.rgb(Math.random() * 255, Math.random() * 255, Math.random() * 255);
     market.forEach(element => {
       subdata = subdata2.filter((ss) => {
         return ss.CityName == element;
       });
       subdata.sort((a,b) => a.mp_year - b.mp_year);
+  
       // Plot line
-      
       var line = d3
         .line()
         .x((d) => xScale(d.mp_year) + xScale.bandwidth() / 2)
@@ -321,11 +322,11 @@ svg.append("text")
         .attr("class", "line")
         .attr("d", line)
         .style("fill", "none")
-        .style("stroke", color.toString())
+        .style("stroke", color(foodCategory))
         .style("stroke-width", "2");
 
         if (subdata.length != 0 ){
-          svg.append("circle").attr("cx",1080).attr("cy",15*(i+1)).attr("r", 6).style("fill", color.toString());
+          svg.append("circle").attr("cx",1080).attr("cy",15*(i+1)).attr("r", 6).style("fill", color(foodCategory));
           svg.append("text").attr("x", 1090).attr("y", 16*(i+1)).text(foodCategory).style("font-size", "15px").attr("alignment-baseline","middle");
           i++;
         }
