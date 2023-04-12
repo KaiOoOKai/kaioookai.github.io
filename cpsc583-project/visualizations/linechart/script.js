@@ -141,7 +141,7 @@ let lineGraph = function (data, svg, market) {
   // y scale will contain price,
   let yScale = d3
     .scaleLinear()
-    .domain([0, max]) // FIX ME
+    .domain([0, max])
     .range([height - MARGIN.BOTTOM, MARGIN.TOP]);
 
   //draws our barchart
@@ -159,7 +159,7 @@ let lineGraph = function (data, svg, market) {
     var xAxis = d3
       .axisBottom()
       .scale(xScale)
-      .tickValues([2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021])
+      .tickValues(yearsArray)
       .ticks(5);
 
     // draw x-axis
@@ -199,60 +199,56 @@ svg.append("text")
     .attr("x2", 0)
     .attr("y2", height - MARGIN.BOTTOM);
 
-    // create a tooltip
-var tooltip = d3.select("body")
-.append("div")
-.attr("class", "tooltip")
-.style("opacity", 0);
+  // create a tooltip
+  var tooltip = d3.select("body")
+  .append("div")
+  .attr("class", "tooltip")
+  .style("opacity", 0);
 
-svg.on("mousemove", function() {
+  svg.on("mousemove", function() {
+    var xPos = d3.pointer(event, this);
+    var bandIndex = Math.floor(xPos[0] / xScale.step());
 
-var xPos = d3.pointer(event, this);
-var bandIndex = Math.floor(xPos[0] / xScale.step());
 
+    VertLine.attr("x1", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT)
+      .attr("x2", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT)
+      let theYear = xScale.domain()[bandIndex];
+      var yValues = data.filter(function(d) { return d.mp_year == theYear && d.mp_month == 1; }).map(function(d) {
+        return d.CityName;
+      });
+      // show tooltip
+      tooltip.transition()
+      .duration(200)
+      .style("opacity", .9);
+      var yValuesPrices = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
+        return d.mp_price;
+      });
 
-VertLine.attr("x1", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT)
-  .attr("x2", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT)
-  let theYear = xScale.domain()[bandIndex];
-  var yValues = data.filter(function(d) { return d.mp_year == theYear && d.mp_month == 1; }).map(function(d) {
-    return d.CityName;
-  });
-   // show tooltip
-   tooltip.transition()
-   .duration(200)
-   .style("opacity", .9);
-   var yValuesPrices = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
-    return d.mp_price;
-  });
+      var yValuesMonths = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
+        return d.mp_month;
+      });;
 
-  var yValuesMonths = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
-    return d.mp_month;
-  });;
+      var yValuesFoods = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
+        return d.FoodName;
+      });
 
-  var yValuesFoods = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
-    return d.FoodName;
-  });
-
-let text = "";
-const formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
-for(let i = 0; i < yValues.length; i++)
-{
-  text += "City: " + yValues[i] + "<br>";
-  text += "Year: " + theYear + "<br>";
-  text += "Food: " + yValuesFoods[i] + "<br>";
-  text += "Price: " + formatter.format(yValuesPrices[i]) + "<br>";
-  text += "<br>";
-}
+      let text = "";
+      const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+      });
+      for(let i = 0; i < yValues.length; i++)
+      {
+        text += "City: " + yValues[i] + "<br>";
+        text += "Year: " + theYear + "<br>";
+        text += "Food: " + yValuesFoods[i] + "<br>";
+        text += "Price: " + formatter.format(yValuesPrices[i]) + "<br>";
+        text += "<br>";
+      }
 
         tooltip.html(text)
-            .style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY - 28) + "px");
-
-      
-  
+          .style("left", (event.pageX + 10) + "px")
+          .style("top", (event.pageY - 28) + "px");
 });
 
     let circles = chart
@@ -323,12 +319,9 @@ for(let i = 0; i < yValues.length; i++)
 
         if (subdata.length != 0 ){
           svg.append("circle").attr("cx",1080).attr("cy",15*(i+1)).attr("r", 6).style("fill", color.toString());
-          svg.append("text").attr("x", 1090).attr("y", 16*(i+1)).text(element+": " + foodCategory).style("font-size", "15px").attr("alignment-baseline","middle");
+          svg.append("text").attr("x", 1090).attr("y", 16*(i+1)).text(foodCategory).style("font-size", "15px").attr("alignment-baseline","middle");
           i++;
         }
-       
-
-       
     }); 
   });
 };
@@ -381,7 +374,6 @@ function val2(sel) {
     }
   }
 
-  //setup("global_food_prices.csv", opts);
   setup(global_prices_csv, opts, opts2, opts3);
 }
 
@@ -398,5 +390,7 @@ function val3(sel) {
       opts3.push(opt.innerHTML);
     }
   }
+  d3.select("#titleCity").html($("#marketPicker").val())
+  d3.select("#range").html(filteredYears.length)
   setup(global_prices_csv, opts, opts2, opts3);
 }
