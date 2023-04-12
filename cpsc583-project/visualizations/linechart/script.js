@@ -79,59 +79,71 @@ const width = 1600,
 
 var _lineGraph; //define a global reference for scatter plot
 
+filterFoods = function(subset, food) {
+  subset = subset.filter((i) => {
+    return food.includes(i.FoodName);
+  });
+}
+
 setup = function (dataPath, food, country, market) {
-  //defining an easy reference for out SVG Container
   var svg = d3.select("#MAIN svg");
 
-  // Loading in our Data with D3
   d3.csv(dataPath).then(function (d) {
-    //the data only exists within this scope
-    var distinct = [];
-
     filteredYears = yearsArray.filter(function(year) {
       return year >= startYear && year <= endYear;
     });
 
-    d = d.filter((i) => {
-      return i.mp_month ==1;
-    });
 
+    // want this data only and then filter the food and years somewhere else
+    // d = d.filter((i) => {
+    //   return i.mp_month == 1 && market.includes(i.CityName) && country.includes(i.CountryName);
+    // });
+  
     d = d.filter((i) => {
-      return i.mp_year <= endYear && i.mp_year >= startYear;
+      return i.mp_month ==1 && food.includes(i.FoodName) && i.mp_year <= endYear && i.mp_year >= startYear && market.includes(i.CityName) && country.includes(i.CountryName);
     });
+  
+    // d = d.filter((i) => {
+    //   return i.mp_year <= endYear && i.mp_year >= startYear;
+    // });
 
-    if (food != null && food.length != 0) {
-      d = d.filter((i) => {
-        return food.includes(i.FoodName);
-      });
-    }
-    if (country != null && country.length != 0) {
-      d = d.filter((i) => {
-        return country.includes(i.CountryName);
-      });
-    }
-    if (market != null && market.length != 0) {
-      d = d.filter((i) => {
-        return market.includes(i.CityName);
-      });
-    }
+    // if (food != null && food.length != 0) {
+    //   d = d.filter((i) => {
+    //     return food.includes(i.FoodName);
+    //   });
+    // }
+    // if (country != null && country.length != 0) {
+    //   d = d.filter((i) => {
+    //     return country.includes(i.CountryName);
+    //   });
+    // }
+    // if (market != null && market.length != 0) {
+    //   d = d.filter((i) => {
+    //     return market.includes(i.CityName);
+    //   });
+    // }
     if (food == undefined || country == undefined || market == undefined) d = [];
     else if (food.length == 0 || country.length == 0  || market.length == 0 ) d = [];
     
-       var values = d.map(function(vvv) { return +vvv.mp_price; });
+    var values = d.map(function(vvv) { return +vvv.mp_price; });
   
-  // find the maximum value
-  max = d3.max(values);
-  max = 1.1 * max;
+  // // find the maximum value
+  // max = d3.max(values);
+  // max = 1.1 * max;
   
-  gggggg = d;
-    // create a barchart object
-    _lineGraph = new lineGraph(d, svg, market);
-    _lineGraph.draw();
+  // gggggg = d;
+  //   // create a barchart object
+  //   _lineGraph = new lineGraph(d, svg, market);
+  //   _lineGraph.draw();
   });
+
+  
 };
 
 let lineGraph = function (data, svg, market) {
+  console.log(data)
+
+
   // x scale will contain years
   xScale = d3
     .scaleBand()
@@ -258,17 +270,12 @@ svg.append("text")
       .append("circle")
       .attr("stroke", "red")
       .attr("fill", "red")
-      // x-axis encodes the sepal length
-      // .attr("cx", (d) => xScale(d.mp_year)) // FIXME
       .attr("cx", function (d) {
         return xScale(d.mp_year) + xScale.bandwidth() / 2;
       })
-
-      // y-axis encodes the sepal width
       .attr("cy", (d) => {
         return yScale(d.mp_price);
-      }) // FIXME
-      // radius of circle encode petal width
+      })
       .attr("r", 3)
       .style("opacity", function (d) {
         return 1;
