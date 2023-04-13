@@ -33,7 +33,7 @@ window.onload = function(){
 };
 
 function gotoLineChart(){
-  window.location.href = "../linechart/index.html?country=" + selectedCountry;
+  window.open("../linechart/index.html?country=" + selectedCountry, '_blank', 'width=1520,height=900,left=800,top=100');
 }
 
 const MARGIN = { "LEFT":100, "RIGHT":100, "TOP":100, "BOTTOM":200 };
@@ -90,8 +90,9 @@ let stackedBarChart = function(data){
     .range([height - MARGIN.BOTTOM, MARGIN.TOP])
 
   let color = d3.scaleOrdinal()
-    .domain(['Apples (red) - Retail'], ['Beans - Retail'], ['Bread (wheat) - Retail'], ['Bread - Retail'], ['Cabbage - Retail'], ['Carrots - Retail'], ['Cucumbers - Retail'], ['Eggs - Retail'], ['Fish (frozen) - Retail'], ['Garlic - Retail'], ['Meat (beef) - Retail'], ['Meat (chicken) - Retail'], ['Meat (lamb) - Retail'], ['Meat (pork) - Retail'], ['Milk - Retail'], ['Oil (sunflower) - Retail'], ['Oil (vegetable) - Retail'], ['Onions - Retail'], ['Oranges - Retail'], ['Pasta - Retail'], ['Peas - Retail'], ['Potatoes - Retail'], ['Rice (high quality) - Retail'], ['Rice (low quality) - Retail'], ['Salt - Retail'], ['Sugar (local) - Retail'], ['Sugar (white) - Retail'], ['Tea (black) - Retail'], ['Tomatoes - Retail'], ['Walnuts - Retail'], ['Wheat - Retail'], ['Wheat flour (first grade) - Retail'])
-    .range(d3.schemeCategory10);
+  .domain(['Red Apples','Beans','Bread (wheat)','Bread','Cabbage','Carrots','Cucumbers','Eggs','Fish','Garlic','Beef','Chicken','Lamb','Pork','Milk','Oil (sunflower)','Oil (vegetable)','Onions','Oranges','Pasta','Peas','Potatoes','Rice (high quality)','Rice (low quality)','Salt','Sugar (local)','Sugar (white)','Tea (black)','Tomatoes','Walnuts','Wheat','Flour (first grade)'])
+  .range(['#FF5733', '#C70039', '#900C3F', '#581845', '#4A235A', '#7D3C98', '#00FF7F', '#00FA9A', '#00CED1', '#1E90FF', '#4169E1', '#0000FF', '#8B008B', '#800080', '#FF1493', '#FF00FF', '#FF4500', '#FFD700', '#FFA500', '#FF8C00', '#008000', '#228B22', '#6B8E23', '#FFC0CB', '#FFB6C1', '#FF69B4', '#DC143C', '#B22222', '#FF6347', '#FF7F50', '#F08080', '#E9967A']);
+  
 
     // Prep the tooltip bits, initial display is hidden
     var tooltip = d3.select("body")

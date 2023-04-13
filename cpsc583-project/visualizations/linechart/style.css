@@ -1,3 +1,4 @@
+
 svg{
   height: 1080px;
   width: 1920px;
@@ -18,10 +19,15 @@ svg{
   color: black;
 }
 
+h3#viz-title{
+  margin-bottom: 0px;
+}
+
 html, svg, h3, h4, #main, .relative {
   font-family: Helvetica;
   background: #191919;
   color: gainsboro;
+  padding: 10px;
 }
 
 text {
@@ -32,6 +38,7 @@ text {
 
 #year-label {
   font-family: Helvetica;
-  font-size: 20px;
+  font-size: 16px;
   color: gainsboro;
+  text-align: center;
 }

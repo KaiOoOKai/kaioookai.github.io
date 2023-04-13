@@ -2,15 +2,15 @@ let d3 = window.d3;
 let max = 2;
 let xScale;
 
-var foodCategories = ['Bread - Retail', 'Rice (low quality) - Retail', 'Rice (high quality) - Retail',
-'Meat (chicken) - Retail', 'Eggs - Retail', 'Milk - Retail', 'Meat (beef) - Retail',
-'Meat (pork) - Retail', 'Meat (lamb) - Retail','Fish (frozen) - Retail', 'Carrots - Retail', 
-'Onions - Retail', 'Potatoes - Retail', 'Beans - Retail', 'Salt - Retail',
-'Apples (red) - Retail', 'Tomatoes - Retail', 'Oranges - Retail', 'Wheat - Retail',
-'Bread (wheat) - Retail', 'Oil (vegetable) - Retail', 'Oil (sunflower) - Retail', 
-'Sugar (white) - Retail', 'Cabbage - Retail', 'Garlic - Retail', 'Sugar (local) - Retail', 
-'Pasta - Retail', 'Cucumbers - Retail', 'Wheat flour (first grade) - Retail', 
-'Walnuts - Retail', 'Peas - Retail', 'Tea (black) - Retail'];
+var foodCategories = ['Bread', 'Rice (low quality)', 'Rice (high quality)',
+'Chicken', 'Eggs', 'Milk', 'Beef',
+'Pork', 'Lamb','Fish', 'Carrots', 
+'Onions', 'Potatoes', 'Beans', 'Salt',
+'Red Apples', 'Tomatoes', 'Oranges', 'Wheat',
+'Bread (wheat)', 'Oil (vegetable)', 'Oil (sunflower)', 
+'Sugar (white)', 'Cabbage', 'Garlic', 'Sugar (local)', 
+'Pasta', 'Cucumbers', 'Flour (first grade)', 
+'Walnuts', 'Peas', 'Tea (black)'];
 
 let yearsArray = [2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021];
 let startYear = yearsArray[0];
@@ -32,8 +32,8 @@ let selectedCountry = "Afghanistan";
 let selectedCity = "Hirat";
 
 let colorScale = d3.scaleOrdinal()
-.domain(['Apples (red) - Retail'], ['Beans - Retail'], ['Bread (wheat) - Retail'], ['Bread - Retail'], ['Cabbage - Retail'], ['Carrots - Retail'], ['Cucumbers - Retail'], ['Eggs - Retail'], ['Fish (frozen) - Retail'], ['Garlic - Retail'], ['Meat (beef) - Retail'], ['Meat (chicken) - Retail'], ['Meat (lamb) - Retail'], ['Meat (pork) - Retail'], ['Milk - Retail'], ['Oil (sunflower) - Retail'], ['Oil (vegetable) - Retail'], ['Onions - Retail'], ['Oranges - Retail'], ['Pasta - Retail'], ['Peas - Retail'], ['Potatoes - Retail'], ['Rice (high quality) - Retail'], ['Rice (low quality) - Retail'], ['Salt - Retail'], ['Sugar (local) - Retail'], ['Sugar (white) - Retail'], ['Tea (black) - Retail'], ['Tomatoes - Retail'], ['Walnuts - Retail'], ['Wheat - Retail'], ['Wheat flour (first grade) - Retail'])
-.range(d3.schemeCategory10);
+.domain(['Red Apples','Beans','Bread (wheat)','Bread','Cabbage','Carrots','Cucumbers','Eggs','Fish','Garlic','Beef','Chicken','Lamb','Pork','Milk','Oil (sunflower)','Oil (vegetable)','Onions','Oranges','Pasta','Peas','Potatoes','Rice (high quality)','Rice (low quality)','Salt','Sugar (local)','Sugar (white)','Tea (black)','Tomatoes','Walnuts','Wheat','Flour (first grade)'])
+.range(['#FF5733', '#C70039', '#900C3F', '#581845', '#4A235A', '#7D3C98', '#00FF7F', '#00FA9A', '#00CED1', '#1E90FF', '#4169E1', '#0000FF', '#8B008B', '#800080', '#FF1493', '#FF00FF', '#FF4500', '#FFD700', '#FFA500', '#FF8C00', '#008000', '#228B22', '#6B8E23', '#FFC0CB', '#FFB6C1', '#FF69B4', '#DC143C', '#B22222', '#FF6347', '#FF7F50', '#F08080', '#E9967A']);
 
 const MARGIN = {
   LEFT: 100,
@@ -151,8 +151,7 @@ function updateLineGraph(data) {
     var xAxis = d3
       .axisBottom()
       .scale(xScale)
-      .tickValues(yearsArray)
-      .ticks(5);
+      .tickValues(yearsArray);
 
     // draw x-axis
     chart.append("g")
@@ -189,13 +188,12 @@ function updateLineGraph(data) {
   this.drawChart = function () {
     // data filtered by food selection
     filteredByFood = data.filter(i => {
-        if (foods.includes(i.FoodName)) { 
-          console.log(i.FoodName)
-          return foods; 
-        }
+      if (foods.includes(i.FoodName)) { 
+        console.log(i.FoodName)
+        return foods; 
+      }
     });
-
-    // console.log(filteredByFood, foods)
+  
     // draw points
     let circles = chart.selectAll("circle")
     .data(filteredByFood)
@@ -244,8 +242,8 @@ function updateLineGraph(data) {
   
     // legend
     for (let index in foods) {
-      svg.append("circle").attr("cx",1080).attr("cy",19*(i+1)).attr("r", 6).style("fill", colorScale(foods[index])).attr("class", "legend");
-      svg.append("text").attr("x", 1090).attr("y", 20*(i+1)).text(foods[index]).style("font-size", "15px").attr("alignment-baseline","middle")
+      svg.append("circle").attr("cx",100).attr("cy",14*(i+1)).attr("r", 6).style("fill", colorScale(foods[index])).attr("class", "legend");
+      svg.append("text").attr("x", 110).attr("y", 15*(i+1)).text(foods[index]).style("font-size", "15px").attr("alignment-baseline","middle")
       .style("fill", "gainsboro").style("font-family", "Helvetica").attr("class", "legend");
       i++;
     }
@@ -403,7 +401,6 @@ function citySelect(sel) {
     }
   }
   d3.select("#titleCity").html($("#marketPicker").val())
-  d3.select("#range").html(filteredYears.length)
   if (_lineGraph != undefined) {
     setup();
   }
