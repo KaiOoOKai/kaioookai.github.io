@@ -14,7 +14,7 @@ var foodCategories = ['Bread - Retail', 'Rice (low quality) - Retail', 'Rice (hi
 
 let yearsArray = [2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021];
 let startYear = yearsArray[0];
-let endYear = yearsArray.pop();
+let endYear = 2021;
 
 var foods = [];
 var countries = [];
@@ -195,18 +195,17 @@ function updateLineGraph(data) {
         }
     });
 
-    console.log(filteredByFood, foods)
+    // console.log(filteredByFood, foods)
     // draw points
     let circles = chart.selectAll("circle")
     .data(filteredByFood)
     .enter()
     .append("circle")
-    // .attr("stroke", "gainsboro")
     .attr("fill", (d)=>colorScale(d.FoodName))
     .attr("cx", function (d) { return xScale(d.mp_year) + xScale.bandwidth() / 2; })
     .attr("cy", (d) => {return yScale(d.mp_price);})
     .attr("r", 5)
-    .style("opacity",1);
+    .style("opacity", 0.5);
 
     var subdata = [];
     var i =0;
@@ -225,6 +224,12 @@ function updateLineGraph(data) {
         .x((d) => xScale(d.mp_year) + xScale.bandwidth() / 2)
         .y((d) => yScale(d.mp_price))
         .curve(d3.curveMonotoneX);
+       // Plot line
+      var line = d3
+        .line()
+        .x((d) => xScale(d.mp_year) + xScale.bandwidth() / 2)
+        .y((d) => yScale(d.mp_price))
+        .curve(d3.curveMonotoneX);
       
       svg.append("path")
         .datum(subdata)
@@ -234,6 +239,7 @@ function updateLineGraph(data) {
         .style("stroke", colorScale(foodCategory))
         .style("stroke-width", "2");
       }); 
+
     });
   
     // legend
@@ -385,8 +391,6 @@ function countrySelect(sel) {
 function citySelect(sel) {
   d3.select("svg").remove();
   d3.select("#MAIN").append("svg");
-  
-  // d3.selectAll(".tooltip").remove();
 
   var opt;
   cities = [];
@@ -401,7 +405,7 @@ function citySelect(sel) {
   d3.select("#titleCity").html($("#marketPicker").val())
   d3.select("#range").html(filteredYears.length)
   if (_lineGraph != undefined) {
-      setup();
+    setup();
   }
   else if (firstLoad) {
     setup();
