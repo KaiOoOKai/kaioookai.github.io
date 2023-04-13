@@ -1,23 +1,57 @@
 let d3 = window.d3;
-let max = 5;
+let max = 2;
 let xScale;
-let startYear = 2003;
-let endYear = 2021;
-let yearsArray = [2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021];
-var opts = [];
-var opts2 = [];
-var opts3 = [];
 
+var foodCategories = ['Bread - Retail', 'Rice (low quality) - Retail', 'Rice (high quality) - Retail',
+'Meat (chicken) - Retail', 'Eggs - Retail', 'Milk - Retail', 'Meat (beef) - Retail',
+'Meat (pork) - Retail', 'Meat (lamb) - Retail','Fish (frozen) - Retail', 'Carrots - Retail', 
+'Onions - Retail', 'Potatoes - Retail', 'Beans - Retail', 'Salt - Retail',
+'Apples (red) - Retail', 'Tomatoes - Retail', 'Oranges - Retail', 'Wheat - Retail',
+'Bread (wheat) - Retail', 'Oil (vegetable) - Retail', 'Oil (sunflower) - Retail', 
+'Sugar (white) - Retail', 'Cabbage - Retail', 'Garlic - Retail', 'Sugar (local) - Retail', 
+'Pasta - Retail', 'Cucumbers - Retail', 'Wheat flour (first grade) - Retail', 
+'Walnuts - Retail', 'Peas - Retail', 'Tea (black) - Retail'];
+
+let yearsArray = [2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021];
+let startYear = yearsArray[0];
+let endYear = yearsArray.pop();
+
+var foods = [];
+var countries = [];
+var cities = [];
+
+let firstLoad = true;
+
+// filtered years
 let filteredYears = yearsArray.filter(function(year) {
   return year >= startYear && year <= endYear;
 });
 
+// defaulted selected country and city
 let selectedCountry = "Afghanistan";
 let selectedCity = "Hirat";
 
+let colorScale = d3.scaleOrdinal()
+.domain(['Apples (red) - Retail'], ['Beans - Retail'], ['Bread (wheat) - Retail'], ['Bread - Retail'], ['Cabbage - Retail'], ['Carrots - Retail'], ['Cucumbers - Retail'], ['Eggs - Retail'], ['Fish (frozen) - Retail'], ['Garlic - Retail'], ['Meat (beef) - Retail'], ['Meat (chicken) - Retail'], ['Meat (lamb) - Retail'], ['Meat (pork) - Retail'], ['Milk - Retail'], ['Oil (sunflower) - Retail'], ['Oil (vegetable) - Retail'], ['Onions - Retail'], ['Oranges - Retail'], ['Pasta - Retail'], ['Peas - Retail'], ['Potatoes - Retail'], ['Rice (high quality) - Retail'], ['Rice (low quality) - Retail'], ['Salt - Retail'], ['Sugar (local) - Retail'], ['Sugar (white) - Retail'], ['Tea (black) - Retail'], ['Tomatoes - Retail'], ['Walnuts - Retail'], ['Wheat - Retail'], ['Wheat flour (first grade) - Retail'])
+.range(d3.schemeCategory10);
+
+const MARGIN = {
+  LEFT: 100,
+  RIGHT: 100,
+  TOP: 100,
+  BOTTOM: 200,
+};
+
+const width = 1600,
+  height = 800;
+
+var _lineGraph; //define a global reference for line plot
+
 window.onload = function () {
-  val(document.getElementById('foodPicker'));
-  val2(document.getElementById('countryPicker'));
+  foodSelect(document.getElementById('foodPicker'));
+  countrySelect(document.getElementById('countryPicker'));
+
+  var label = document.getElementById('year-label');
 
    // Get the query string from the URL
    let queryString = window.location.search;
@@ -43,128 +77,71 @@ window.onload = function () {
    $("select[name=countryPicker]").val(selectedCountry);
    $("select[name=countryPicker]").selectpicker('refresh');
   
-   const country = document.getElementById("countryPicker").value;
-			const cityDropdown = document.getElementById("marketPicker");
-			cityDropdown.innerHTML = "<option value=''>--Select City--</option>";
-			if (country) {
-				const cities = citiesByCountry[country];
-				cities.forEach(city => {
-					const option = document.createElement("option");
-					option.value = city;
-					option.text = city;
-          if(city == selectedCity)
-            option.selected = true;
-					cityDropdown.appendChild(option);
-				});
-			}
+  const country = document.getElementById("countryPicker").value;
+  const cityDropdown = document.getElementById("marketPicker");
+  cityDropdown.innerHTML = "<option value=''>--Select City--</option>";
+  if (country) {
+    const cities = citiesByCountry[country];
+    cities.forEach(city => {
+      const option = document.createElement("option");
+      option.value = city;
+      option.text = city;
+      if(city == selectedCity)
+        option.selected = true;
+      cityDropdown.appendChild(option);
+    });
+  }
 
-    $('#marketPicker').selectpicker('refresh');
+  $('#marketPicker').selectpicker('refresh');
 
-      opts2 = [];
-  
-      opts2.push(selectedCountry);
-      val3(document.getElementById('marketPicker'));
- 
+  countries = [];
+  countries.push(selectedCountry);
+  citySelect(document.getElementById('marketPicker'));
+
 };
 
-let color = d3.scaleOrdinal()
-.domain(['Apples (red) - Retail'], ['Beans - Retail'], ['Bread (wheat) - Retail'], ['Bread - Retail'], ['Cabbage - Retail'], ['Carrots - Retail'], ['Cucumbers - Retail'], ['Eggs - Retail'], ['Fish (frozen) - Retail'], ['Garlic - Retail'], ['Meat (beef) - Retail'], ['Meat (chicken) - Retail'], ['Meat (lamb) - Retail'], ['Meat (pork) - Retail'], ['Milk - Retail'], ['Oil (sunflower) - Retail'], ['Oil (vegetable) - Retail'], ['Onions - Retail'], ['Oranges - Retail'], ['Pasta - Retail'], ['Peas - Retail'], ['Potatoes - Retail'], ['Rice (high quality) - Retail'], ['Rice (low quality) - Retail'], ['Salt - Retail'], ['Sugar (local) - Retail'], ['Sugar (white) - Retail'], ['Tea (black) - Retail'], ['Tomatoes - Retail'], ['Walnuts - Retail'], ['Wheat - Retail'], ['Wheat flour (first grade) - Retail'])
-.range(d3.schemeCategory10);
-
-const MARGIN = {
-  LEFT: 100,
-  RIGHT: 100,
-  TOP: 100,
-  BOTTOM: 200,
-};
-
-const width = 1600,
-  height = 800;
-
-var _lineGraph; //define a global reference for scatter plot
-
-filterFoods = function(subset, food) {
-  subset = subset.filter((i) => {
-    return food.includes(i.FoodName);
-  });
-}
-
-setup = function (dataPath, food, country, market) {
-  var svg = d3.select("#MAIN svg");
-
-  d3.csv(dataPath).then(function (d) {
+setup = function() {
+  // parse csv file by country and city 
+  d3.csv(global_prices_csv).then(function (d) {
     filteredYears = yearsArray.filter(function(year) {
       return year >= startYear && year <= endYear;
     });
 
-
-    // want this data only and then filter the food and years somewhere else
-    // d = d.filter((i) => {
-    //   return i.mp_month == 1 && market.includes(i.CityName) && country.includes(i.CountryName);
-    // });
-  
+    // filter out years 
     d = d.filter((i) => {
-      return i.mp_month == 1 && food.includes(i.FoodName) && i.mp_year <= endYear && i.mp_year >= startYear && market.includes(i.CityName) && country.includes(i.CountryName);
+      return i.mp_month == 1 && i.mp_year <= endYear && i.mp_year >= startYear && cities.includes(i.CityName) && countries.includes(i.CountryName);
     });
-  
-    // d = d.filter((i) => {
-    //   return i.mp_year <= endYear && i.mp_year >= startYear;
-    // });
 
-    // if (food != null && food.length != 0) {
-    //   d = d.filter((i) => {
-    //     return food.includes(i.FoodName);
-    //   });
-    // }
-    // if (country != null && country.length != 0) {
-    //   d = d.filter((i) => {
-    //     return country.includes(i.CountryName);
-    //   });
-    // }
-    // if (market != null && market.length != 0) {
-    //   d = d.filter((i) => {
-    //     return market.includes(i.CityName);
-    //   });
-    // }
-    if (food == undefined || country == undefined || market == undefined) d = [];
-    else if (food.length == 0 || country.length == 0  || market.length == 0 ) d = [];
+    if (foods == undefined || countries == undefined || cities == undefined) d = [];
+    else if (foods.length == 0 || countries.length == 0  || cities.length == 0 ) d = [];
     
-    // FIXME: compute max price for the given data
-    // var values = d3.max(d, function(d) { return +d.mp_price; });
-    
-    // // find the maximum value
-    // max = 1.1 * max;
-  
-    // create a barchart object
-    _lineGraph = new lineGraph(d, svg, market);
-    _lineGraph.draw();
+    max = d3.max(d, function(d) { return +d.mp_price; });
+
+    _lineGraph = new updateLineGraph(d);
+    _lineGraph.drawChart();
+    _lineGraph.drawAxis();
   });
+}
 
-
-};
-
-let lineGraph = function (data, svg, market) {
-  console.log(data)
-
-
+function updateLineGraph(data) {
+  var svg = d3.select("#MAIN svg");
   // x scale will contain years
   xScale = d3
     .scaleBand()
     .domain(filteredYears) 
     .range([MARGIN.LEFT, width - MARGIN.RIGHT]);
 
-  // y scale will contain price,
+  // y scale will contain price
   let yScale = d3
     .scaleLinear()
     .domain([0, max])
     .range([height - MARGIN.BOTTOM, MARGIN.TOP]);
 
-  //draws our barchart
-  this.draw = function () {
-    let chart = svg.append("g").attr("class", "scatterPlot");
+  let chart = svg.append("g").attr("class", "lineChart");
+  var yAxis = d3.axisLeft().scale(yScale);
 
-    var yAxis = d3.axisLeft().scale(yScale);
-
+  // draw axis function
+  this.drawAxis = function() {
     // draw y-axis
     chart
       .append("g")
@@ -178,33 +155,89 @@ let lineGraph = function (data, svg, market) {
       .ticks(5);
 
     // draw x-axis
-    chart
-      .append("g")
-      .attr(
-        "transform",
-        "translate(" + 0 + "," + (height - MARGIN.BOTTOM) + ")"
-      )
+    chart.append("g")
+      .attr("transform","translate(" + 0 + "," + (height - MARGIN.BOTTOM) + ")")
       .attr("class", "xAxis")
       .call(xAxis);
 
-// Create SVG element for x-axis label
-svg.append("text")
-    .attr("class", "x-axis-label")
-    .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (width/2) + "," + (height + MARGIN.BOTTOM - 350) + ")")
-    .text("Years");
+    // Create SVG element for x-axis label
+    svg.append("text")
+      .attr("class", "x-axis-label")
+      .attr("text-anchor", "middle")
+      .attr("transform", "translate(" + (width/2) + "," + (height + MARGIN.BOTTOM - 350) + ")")
+      .text("Years");
 
-// Create SVG element for y-axis label
-svg.append("text")
-    .attr("class", "y-axis-label")
-    .attr("text-anchor", "middle")
-    .attr("transform", "rotate(-90)")
-    .attr("y", MARGIN.LEFT-40)
-    .attr("x", 50 - (height / 2))
-    .attr("dy", "1em")
-    .text("Price in CAD ($)");
-    const scale = 10;
+    // Create SVG element for y-axis label
+    svg.append("text")
+      .attr("class", "y-axis-label")
+      .attr("text-anchor", "middle")
+      .attr("transform", "rotate(-90)")
+      .attr("y", MARGIN.LEFT-40)
+      .attr("x", 50 - (height / 2))
+      .attr("dy", "1em")
+      .text("Price in CAD ($)");
+      const scale = 10;
+  }
 
+  // draw line chart function
+  this.drawChart = function () {
+    // data filtered by food selection
+    filteredByFood = data.filter(i => {
+        if (foods.includes(i.FoodName)) { 
+          console.log(i.FoodName)
+          return foods; 
+        }
+    });
+
+    console.log(filteredByFood, foods)
+    // draw points
+    let circles = chart.selectAll("circle")
+    .data(filteredByFood)
+    .enter()
+    .append("circle")
+    .attr("stroke", "red")
+    .attr("fill", "red")
+    .attr("cx", function (d) { return xScale(d.mp_year) + xScale.bandwidth() / 2; })
+    .attr("cy", (d) => {return yScale(d.mp_price);})
+    .attr("r", 3)
+    .style("opacity",1);
+
+    var subdata = [];
+    var i =0;
+    // console.log("DRAWINNG LINE", foodCategories)
+    foodCategories.forEach(function (foodCategory) {
+      newdata = filteredByFood.filter((i) => { return i.mp_year <= endYear && i.mp_year >= startYear; });
+      subdata2 = filteredByFood.filter((ss) => { return ss.FoodName == foodCategory; });
+      cities.forEach(element => { 
+        subdata = subdata2.filter((ss) => { return ss.CityName == element; 
+      });
+      subdata.sort((a,b) => a.mp_year - b.mp_year);
+  
+      // Plot line
+      var line = d3
+        .line()
+        .x((d) => xScale(d.mp_year) + xScale.bandwidth() / 2)
+        .y((d) => yScale(d.mp_price))
+        .curve(d3.curveMonotoneX);
+      
+      svg.append("path")
+        .datum(subdata)
+        .attr("class", "line")
+        .attr("d", line)
+        .style("fill", "none")
+        .style("stroke", colorScale(foodCategory))
+        .style("stroke-width", "2");
+      }); 
+    });
+  
+    // legend
+    for (let index in foods) {
+      svg.append("circle").attr("cx",1080).attr("cy",15*(i+1)).attr("r", 6).style("fill", colorScale(foods[index])).attr("class", "legend");
+      svg.append("text").attr("x", 1090).attr("y", 16*(i+1)).text(foods[index]).style("font-size", "15px").attr("alignment-baseline","middle").attr("class", "legend");
+      i++;
+    }
+
+    // tooltip stuff
     let VertLine = svg.append('line')
     .attr("transform","translate(150,100)")
     .style("stroke", "black")
@@ -254,7 +287,7 @@ svg.append("text")
       });
       for(let i = 0; i < yValues.length; i++)
       {
-        // text += "City: " + yValues[i] + "<br>";
+        text += "City: " + yValues[i] + "<br>";
         text += "Year: " + theYear + "<br>";
         text += "Food: " + yValuesFoods[i] + "<br>";
         text += "Price: " + formatter.format(yValuesPrices[i]) + "<br>";
@@ -265,94 +298,43 @@ svg.append("text")
           .style("left", (event.pageX + 10) + "px")
           .style("top", (event.pageY - 28) + "px");
 });
-
-    let circles = chart
-      .selectAll("circle")
-      .data(data)
-      .enter()
-      .append("circle")
-      .attr("stroke", "red")
-      .attr("fill", "red")
-      .attr("cx", function (d) {
-        return xScale(d.mp_year) + xScale.bandwidth() / 2;
-      })
-      .attr("cy", (d) => {
-        return yScale(d.mp_price);
-      })
-      .attr("r", 3)
-      .style("opacity", function (d) {
-        return 1;
-      });
-  };
-
-  var foodCategories = ['Bread - Retail', 'Rice (low quality) - Retail', 'Rice (high quality) - Retail',
- 'Meat (chicken) - Retail', 'Eggs - Retail', 'Milk - Retail', 'Meat (beef) - Retail',
- 'Meat (pork) - Retail', 'Meat (lamb) - Retail','Fish (frozen) - Retail', 'Carrots - Retail', 
- 'Onions - Retail', 'Potatoes - Retail', 'Beans - Retail', 'Salt - Retail',
- 'Apples (red) - Retail', 'Tomatoes - Retail', 'Oranges - Retail', 'Wheat - Retail',
- 'Bread (wheat) - Retail', 'Oil (vegetable) - Retail', 'Oil (sunflower) - Retail', 
- 'Sugar (white) - Retail', 'Cabbage - Retail', 'Garlic - Retail', 'Sugar (local) - Retail', 
- 'Pasta - Retail', 'Cucumbers - Retail', 'Wheat flour (first grade) - Retail', 
- 'Walnuts - Retail', 'Peas - Retail', 'Tea (black) - Retail'];
-
-  var subdata = [];
-  var i =0;
-  foodCategories.forEach(function (foodCategory) {
-    data = data.filter((i) => {
-      return i.mp_year <= endYear && i.mp_year >= startYear;
-    });
-    subdata2 = data.filter((ss) => {
-      return ss.FoodName == foodCategory;
-    });
-    market.forEach(element => {
-      subdata = subdata2.filter((ss) => {
-        return ss.CityName == element;
-      });
-      subdata.sort((a,b) => a.mp_year - b.mp_year);
-  
-      // Plot line
-      var line = d3
-        .line()
-        .x((d) => xScale(d.mp_year) + xScale.bandwidth() / 2)
-        .y((d) => yScale(d.mp_price))
-        .curve(d3.curveMonotoneX);
-      svg
-        .append("path")
-        .datum(subdata)
-        .attr("class", "line")
-        .attr("d", line)
-        .style("fill", "none")
-        .style("stroke", color(foodCategory))
-        .style("stroke-width", "2");
-
-        if (subdata.length != 0 ){
-          svg.append("circle").attr("cx",1080).attr("cy",15*(i+1)).attr("r", 6).style("fill", color(foodCategory));
-          svg.append("text").attr("x", 1090).attr("y", 16*(i+1)).text(foodCategory).style("font-size", "15px").attr("alignment-baseline","middle");
-          i++;
-        }
-    }); 
-  });
-};
-
-
-function val(sel) {
-  d3.select("svg").remove();
-  d3.select("#MAIN").append("svg");
-  var opt;
-  opts = [];
-  var len = sel.options.length;
-  for (var i = 0; i < len; i++) {
-    opt = sel.options[i];
-
-    if (opt.selected) {
-      opts.push(opt.innerHTML);
-    }
   }
-
-  setup(global_prices_csv, opts, opts2, opts3);
 }
 
-function val2(sel) {
+
+///////////////////////////////////////////
+//
+//               SELECTIONS
+//
+///////////////////////////////////////////
+// food dropdown
+function foodSelect(sel) {
+  // console.log(" food");
+
+  d3.selectAll(".line").remove();
+  d3.selectAll("circle").remove();
+  d3.selectAll(".legend").remove();
+  d3.selectAll(".tooltip").remove();
+
+  foods = [];
+  var len = sel.options.length;
+  for (var i = 0; i < len; i++) {
+    let opt = sel.options[i];
+    if (opt.selected) {
+      foods.push(opt.innerHTML);
+    }
+  }
+  if (_lineGraph != undefined) {
+    _lineGraph.drawChart();
+  }
+  else if (firstLoad) {
+    setup();
+    firstLoad = !firstLoad
+  }
+}
+
+// country dropdown
+function countrySelect(sel) {
   const country = document.getElementById("countryPicker").value;
 			const cityDropdown = document.getElementById("marketPicker");
 			cityDropdown.innerHTML = "<option value=''>--Select City--</option>";
@@ -371,34 +353,51 @@ function val2(sel) {
 
   d3.select("svg").remove();
   d3.select("#MAIN").append("svg");
+  
+  // d3.selectAll(".tooltip").remove();
   var opt;
-  opts2 = [];
+  countries = [];
   var len = sel.options.length;
   for (var i = 0; i < len; i++) {
     opt = sel.options[i];
 
     if (opt.selected) {
-      opts2.push(opt.innerHTML);
+      countries.push(opt.innerHTML);
     }
   }
-
-  setup(global_prices_csv, opts, opts2, opts3);
+  if (_lineGraph != undefined) {
+    setup();
+  }
+  else if (firstLoad) {
+    setup();
+    firstLoad = !firstLoad;
+  }
 }
 
-function val3(sel) {
+// city/market dropdown
+function citySelect(sel) {
   d3.select("svg").remove();
   d3.select("#MAIN").append("svg");
+  
+  // d3.selectAll(".tooltip").remove();
+
   var opt;
-  opts3 = [];
+  cities = [];
   var len = sel.options.length;
   for (var i = 0; i < len; i++) {
     opt = sel.options[i];
 
     if (opt.selected) {
-      opts3.push(opt.innerHTML);
+      cities.push(opt.innerHTML);
     }
   }
   d3.select("#titleCity").html($("#marketPicker").val())
   d3.select("#range").html(filteredYears.length)
-  setup(global_prices_csv, opts, opts2, opts3);
+  if (_lineGraph != undefined) {
+      setup();
+  }
+  else if (firstLoad) {
+    setup();
+    firstLoad = !firstLoad;
+  }
 }

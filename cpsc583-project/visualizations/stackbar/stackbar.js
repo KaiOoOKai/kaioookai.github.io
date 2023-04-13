@@ -54,7 +54,6 @@ let setup = function (dataPath) {
 };
 
 let stackedBarChart = function(data){
-  console.log(foods);
   subset = data.filter(d=> { 
     // filter by selected year and country that was clicked on in the cartogram
     if(d.CountryName == selectedCountry){ return d; }
