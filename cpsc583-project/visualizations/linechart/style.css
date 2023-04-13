@@ -3,12 +3,6 @@ svg{
   width: 1920px;
 }
 
-.vertical-line {
-  stroke: black;
-  stroke-width: 1px;
-  stroke-opacity: 0.5;
-}
-
 .tooltip {
   background-color: white;
   border: 1px solid black;
@@ -18,4 +12,26 @@ svg{
 
 #slider {
  margin-bottom: 10px;   
+}
+
+#tooltip {
+  color: black;
+}
+
+html, svg, h3, h4, #main, .relative {
+  font-family: Helvetica;
+  background: #191919;
+  color: gainsboro;
+}
+
+text {
+  font-family: Helvetica;
+  font-size: 15px;
+  color: gainsboro;
+}
+
+#year-label {
+  font-family: Helvetica;
+  font-size: 20px;
+  color: gainsboro;
 }

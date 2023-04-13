@@ -162,17 +162,23 @@ function updateLineGraph(data) {
 
     // Create SVG element for x-axis label
     svg.append("text")
+      .style("font-size", "20px")
+      .style("fill", "gainsboro")
+      .style("font-family", "Helvetica")
       .attr("class", "x-axis-label")
       .attr("text-anchor", "middle")
-      .attr("transform", "translate(" + (width/2) + "," + (height + MARGIN.BOTTOM - 350) + ")")
+      .attr("transform", "translate(" + (width/2) + "," + (height + MARGIN.BOTTOM - 300) + ")")
       .text("Years");
 
     // Create SVG element for y-axis label
     svg.append("text")
       .attr("class", "y-axis-label")
+      .style("fill", "gainsboro")
+      .style("font-family", "Helvetica")
+      .style("font-size", "20px")
       .attr("text-anchor", "middle")
       .attr("transform", "rotate(-90)")
-      .attr("y", MARGIN.LEFT-40)
+      .attr("y", MARGIN.LEFT-60)
       .attr("x", 50 - (height / 2))
       .attr("dy", "1em")
       .text("Price in CAD ($)");
@@ -195,11 +201,11 @@ function updateLineGraph(data) {
     .data(filteredByFood)
     .enter()
     .append("circle")
-    .attr("stroke", "red")
-    .attr("fill", "red")
+    // .attr("stroke", "gainsboro")
+    .attr("fill", (d)=>colorScale(d.FoodName))
     .attr("cx", function (d) { return xScale(d.mp_year) + xScale.bandwidth() / 2; })
     .attr("cy", (d) => {return yScale(d.mp_price);})
-    .attr("r", 3)
+    .attr("r", 5)
     .style("opacity",1);
 
     var subdata = [];
@@ -232,15 +238,16 @@ function updateLineGraph(data) {
   
     // legend
     for (let index in foods) {
-      svg.append("circle").attr("cx",1080).attr("cy",15*(i+1)).attr("r", 6).style("fill", colorScale(foods[index])).attr("class", "legend");
-      svg.append("text").attr("x", 1090).attr("y", 16*(i+1)).text(foods[index]).style("font-size", "15px").attr("alignment-baseline","middle").attr("class", "legend");
+      svg.append("circle").attr("cx",1080).attr("cy",19*(i+1)).attr("r", 6).style("fill", colorScale(foods[index])).attr("class", "legend");
+      svg.append("text").attr("x", 1090).attr("y", 20*(i+1)).text(foods[index]).style("font-size", "15px").attr("alignment-baseline","middle")
+      .style("fill", "gainsboro").style("font-family", "Helvetica").attr("class", "legend");
       i++;
     }
 
     // tooltip stuff
     let VertLine = svg.append('line')
     .attr("transform","translate(150,100)")
-    .style("stroke", "black")
+    .style("stroke", "white")
     .style("stroke-width", 2)
     .attr("x1", 0)
     .attr("y1", 0)
@@ -261,22 +268,22 @@ function updateLineGraph(data) {
     VertLine.attr("x1", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT)
       .attr("x2", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT)
       let theYear = xScale.domain()[bandIndex];
-      var yValues = data.filter(function(d) { return d.mp_year == theYear && d.mp_month == 1; }).map(function(d) {
+      var yValues = filteredByFood.filter(function(d) { return d.mp_year == theYear && d.mp_month == 1; }).map(function(d) {
         return d.CityName;
       });
       // show tooltip
       tooltip.transition()
       .duration(200)
       .style("opacity", .9);
-      var yValuesPrices = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
+      var yValuesPrices = filteredByFood.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
         return d.mp_price;
       });
 
-      var yValuesMonths = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
+      var yValuesMonths = filteredByFood.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
         return d.mp_month;
       });;
 
-      var yValuesFoods = data.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
+      var yValuesFoods = filteredByFood.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
         return d.FoodName;
       });
 
