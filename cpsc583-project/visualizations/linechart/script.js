@@ -125,7 +125,7 @@ window.onload = function () {
     d3.select("#MAIN").append("svg");
     d3.selectAll(".tooltip").remove();
     d3.select("#range").html(endYear - startYear + 1)
-    // setup();
+    setup();
   });
 
 };
@@ -181,7 +181,7 @@ function updateLineGraph(data) {
     var xAxis = d3
       .axisBottom()
       .scale(xScale)
-      .tickValues(yearsArray);
+      .tickValues(filteredYears);
 
     // draw x-axis
     chart.append("g")
