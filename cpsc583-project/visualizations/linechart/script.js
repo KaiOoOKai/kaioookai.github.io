@@ -20,6 +20,8 @@ var foods = [];
 var countries = [];
 var cities = [];
 
+let loaded = 0;
+
 let firstLoad = true;
 
 // filtered years
@@ -98,9 +100,37 @@ window.onload = function () {
   countries.push(selectedCountry);
   citySelect(document.getElementById('marketPicker'));
 
+  
+  // year select 
+  var slider = document.getElementById('slider');
+  var label = document.getElementById('year-label');
+
+  noUiSlider.create(slider, {
+    start: [2003, 2021],
+    range: {
+      'min': 2003,
+      'max': 2021
+    },
+    step: 1, // Set the step interval to 1
+    connect: true
+  });
+
+
+  slider.noUiSlider.on('update', function(values, handle) {
+    startYear = parseInt(values[0]);
+    endYear = parseInt(values[1]);
+    var selectedYears = startYear + ' - ' + endYear;
+    label.innerHTML = 'Selected Years: ' + selectedYears;
+    d3.select("svg").remove();
+    d3.select("#MAIN").append("svg");
+    d3.selectAll(".tooltip").remove();
+    d3.select("#range").html(endYear - startYear + 1)
+    // setup();
+  });
+
 };
 
-setup = function() {
+function setup(){
   // parse csv file by country and city 
   d3.csv(global_prices_csv).then(function (d) {
     filteredYears = yearsArray.filter(function(year) {
@@ -188,10 +218,7 @@ function updateLineGraph(data) {
   this.drawChart = function () {
     // data filtered by food selection
     filteredByFood = data.filter(i => {
-      if (foods.includes(i.FoodName)) { 
-        console.log(i.FoodName)
-        return foods; 
-      }
+      if (foods.includes(i.FoodName)) { return foods; }
     });
   
     // draw points
@@ -255,32 +282,30 @@ function updateLineGraph(data) {
     var tooltip = null;
     let tooltipCreated = false;
 
-    
     svg.on("mouseout", function() {
       VertLine.style("opacity", 0);
       tooltip.style("opacity", 0);
     });
-  svg.on("mousemove", function() {
-    if (!tooltipCreated) {
+    svg.on("mousemove", function() {
+      if (!tooltipCreated) {
       // create the tooltip
       tooltipCreated = true;
-    }
+      }
     
     var xPos = d3.pointer(event, this);
     var bandIndex = Math.floor(xPos[0] / xScale.step());
 
-  
-
     if (!VertLine) {
       VertLine = svg.append('line')
-    .attr("transform","translate(150,100)")
-    .style("stroke", "white")
-    .style("stroke-width", 2)
-    .style("opacity", 0)
-    .attr("x1", xScale(xScale.domain()[0])-MARGIN.LEFT-10)
-    .attr("y1", 0)
-    .attr("x2", xScale(xScale.domain()[0])-MARGIN.LEFT-10)
-    .attr("y2", height - MARGIN.BOTTOM);
+      .attr("class", "tooltip")
+      .attr("transform","translate(150,100)")
+      .style("stroke", "white")
+      .style("stroke-width", 2)
+      .style("opacity", 0)
+      .attr("x1", xScale(xScale.domain()[0])-MARGIN.LEFT-10)
+      .attr("y1", 0)
+      .attr("x2", xScale(xScale.domain()[0])-MARGIN.LEFT-10)
+      .attr("y2", height - MARGIN.BOTTOM);
     }
     VertLine.attr("x1", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT-10)
       .attr("x2", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT-10)
@@ -292,15 +317,14 @@ function updateLineGraph(data) {
         return d.CityName;
       });
 
-if(!tooltip)
-{
-  tooltip= d3.select("body")
-    .append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
-}
-    
-
+      if(!tooltip)
+      {
+        tooltip= d3.select("body")
+          .append("div")
+          .attr("class", "tooltip")
+          .style("opacity", 0);
+      }
+  
       var yValuesPrices = filteredByFood.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
         return d.mp_price;
       });
@@ -320,34 +344,26 @@ if(!tooltip)
       });
       for(let i = 0; i < yValues.length; i++)
       {
-        text += "City: " + yValues[i] + "<br>";
         text += "Year: " + theYear + "<br>";
         text += "Food: " + yValuesFoods[i] + "<br>";
         text += "Price: " + formatter.format(yValuesPrices[i]) + "<br>";
         text += "<br>";
       }
-      if(text == "")
-      {
-          // show tooltip
-  tooltip.transition()
-  .style("opacity", 0);
-        tooltip.html(text)
-          .style("left", (event.pageX + 10) + "px")
+      if(text == "") {
+        // show tooltip
+        tooltip.html("There was no data for this year")
+          .style("left", (event.pageX + 140) + "px")
           .style("top", (event.pageY - 28) + "px");
       }
-      else
-      {
-
+      else{
       // show tooltip
-      tooltip.transition()
-      .duration(200)
+      tooltip
       .style("opacity", .9);
-            tooltip.html(text)
-              .style("left", (event.pageX + 10) + "px")
-              .style("top", (event.pageY - 28) + "px");
-          }
-
-});
+      tooltip.html(text)
+        .style("left", (event.pageX + 140) + "px")
+        .style("top", (event.pageY - 28) + "px");
+      }
+  });
   }
 }
 
@@ -378,6 +394,7 @@ function foodSelect(sel) {
     _lineGraph.drawChart();
   }
   else if (firstLoad) {
+    console.log("first")
     setup();
     firstLoad = !firstLoad
   }
@@ -403,8 +420,8 @@ function countrySelect(sel) {
 
   d3.select("svg").remove();
   d3.select("#MAIN").append("svg");
-  
-  // d3.selectAll(".tooltip").remove();
+  d3.selectAll(".tooltip").remove();
+
   var opt;
   countries = [];
   var len = sel.options.length;
@@ -415,17 +432,12 @@ function countrySelect(sel) {
       countries.push(opt.innerHTML);
     }
   }
-  if (_lineGraph != undefined) {
-    setup();
-  }
-  else if (firstLoad) {
-    setup();
-    firstLoad = !firstLoad;
-  }
+  setup();
 }
 
 // city/market dropdown
 function citySelect(sel) {
+  d3.selectAll(".tooltip").remove();
   d3.select("svg").remove();
   d3.select("#MAIN").append("svg");
 
@@ -440,11 +452,7 @@ function citySelect(sel) {
     }
   }
   d3.select("#titleCity").html($("#marketPicker").val())
-  if (_lineGraph != undefined) {
-    setup();
-  }
-  else if (firstLoad) {
-    setup();
-    firstLoad = !firstLoad;
-  }
+  
+  setup();
+
 }

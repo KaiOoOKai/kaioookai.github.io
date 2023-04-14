@@ -2,32 +2,7 @@
 
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <script type = "text/javascript" src="../data.js"></script>
-    <script type = "text/javascript" src="../../const.js"></script>
-    <script type="text/javascript" src="script.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/css/bootstrap-select.css"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/js/bootstrap-select.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.css" integrity="sha512-MKxcSu/LDtbIYHBNAWUQwfB3iVoG9xeMCm32QV5hZ/9lFaQZJVaXfz9aFa0IZExWzCpm7OWvp9zq9gVip/nLMg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- Include the noUiSlider JavaScript file -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js" integrity="sha512-UOJe4paV6hYWBnS0c9GnIRH8PLm2nFK22uhfAvsTIqd3uwnWsVri1OPn5fJYdLtGY3wB11LGHJ4yPU1WFJeBYQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    
-    <script>
-      $("select").selectpicker();
-    </script>
   </head>
 
   <body>
@@ -221,36 +196,22 @@
     <div id="MAIN" class="relative">
       <svg></svg>
     </div>
-   
-    
-  <script>
-
-    var slider = document.getElementById('slider');
-    var label = document.getElementById('year-label');
-
-    noUiSlider.create(slider, {
-      start: [2003, 2021],
-      range: {
-        'min': 2003,
-        'max': 2021
-      },
-      step: 1, // Set the step interval to 1
-      connect: true
-    });
-    
-    slider.noUiSlider.on('update', function(values, handle) {
-      startYear = parseInt(values[0]);
-      endYear = parseInt(values[1]);
-      var selectedYears = startYear + ' - ' + endYear;
-      label.innerHTML = 'Selected Years: ' + selectedYears;
-      d3.select("svg").remove();
-      d3.select("#MAIN").append("svg");
-      console.log(endYear - startYear + 1)
-      console.log(endYear - startYear + 1)
-      d3.select("#range").html(endYear - startYear + 1)
-  
-      setup();
-    });
-    </script> 
   </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js" integrity="sha512-UOJe4paV6hYWBnS0c9GnIRH8PLm2nFK22uhfAvsTIqd3uwnWsVri1OPn5fJYdLtGY3wB11LGHJ4yPU1WFJeBYQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.css" integrity="sha512-MKxcSu/LDtbIYHBNAWUQwfB3iVoG9xeMCm32QV5hZ/9lFaQZJVaXfz9aFa0IZExWzCpm7OWvp9zq9gVip/nLMg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script type = "text/javascript" src="../data.js"></script>
+  <script type = "text/javascript" src="../../const.js"></script>
+  <script type="text/javascript" src="script.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+  <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/css/bootstrap-select.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/js/bootstrap-select.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <!-- <script>
+    $("select").selectpicker();
+  </script> -->
 </html>
