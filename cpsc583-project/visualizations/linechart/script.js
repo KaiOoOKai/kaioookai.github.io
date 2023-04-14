@@ -159,7 +159,7 @@ function updateLineGraph(data) {
   xScale = d3
     .scaleBand()
     .domain(filteredYears) 
-    .range([MARGIN.LEFT, width - MARGIN.RIGHT]);
+    .range([100,1500]);
 
   // y scale will contain price
   let yScale = d3
@@ -300,7 +300,7 @@ function updateLineGraph(data) {
           }
       
           var xPos = d3.pointer(event, this);
-          var bandIndex = Math.floor(xPos[0] / xScale.step());
+          var bandIndex = Math.floor((event.pageX -150)/ xScale.step());
       
         
       
@@ -310,15 +310,19 @@ function updateLineGraph(data) {
           .style("stroke", "white")
           .style("stroke-width", 2)
           .style("opacity", 0)
-          .attr("x1", xScale(xScale.domain()[0])-MARGIN.LEFT-10)
+          //.attr("x1", (xScale(xScale.domain()[bandIndex])+700/filteredYears.length))
           .attr("y1", 0)
-          .attr("x2", xScale(xScale.domain()[0])-MARGIN.LEFT-10)
+          //.attr("x2", (xScale(xScale.domain()[bandIndex])+700/filteredYears.length))
           .attr("y2", height - MARGIN.BOTTOM);
           }
-          VertLine.attr("x1", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT-10)
-            .attr("x2", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT-10)
+          if(!isNaN(xScale(xScale.domain()[bandIndex])+700/filteredYears.length))
+          {
+            VertLine.attr("x1",bandIndex*xScale.step()+500/(filteredYears.length-1)-40)
+            .attr("x2", bandIndex*xScale.step()+500/(filteredYears.length-1)-40)
             .style("opacity", 1);
-      
+          }
+ 
+      console.log(bandIndex)
             
             let theYear = xScale.domain()[bandIndex];
             var yValues = filteredByFood.filter(function(d) { return d.mp_year == theYear && d.mp_month == 1; }).map(function(d) {
