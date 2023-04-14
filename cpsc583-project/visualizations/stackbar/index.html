@@ -8,10 +8,10 @@
     </head>
 
     <body>
-      <div id="tooltip" style="position: absolute; z-index: 9999; visibility: hidden; padding: 10px; background-color: rgba(0, 0, 0, 0.8); color: #fff; font-size: 14px; border-radius: 3px;"></div>
+      <div id="tooltip"></div>
       <div id="main">
       <h3 style="text-align:center;"><span id="titleCountry">Philippines</span>'s Markets and Their Food Prices</h3>
-        <h4 style="width: 33%; float: left; padding-left: 3%">
+        <h4 style="width: 100%; float: left; padding-left: 3%">
               Food type:<select
                 id="foodPicker"
                 onchange="foodchange(this)"
@@ -62,10 +62,10 @@
                     <option>Sugar (white)</option>
                     <option>Tea (black)</option>
               </optgroup>
+              <input type="button" onclick="gotoLineChart()" value="View City Prices Over The Years" style="margin-left:5%;background-color: #007bff; color: #fff; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 4px; box-shadow: 2px 2px 2px rgba(0,0,0,0.3);" onmouseover="this.style.backgroundColor='#0069d9';" onmouseout="this.style.backgroundColor='#007bff';">
+
       </h4>
-          <h4 style="width: 33%; float: left; padding-left: 3%">
-          <input type="button" onclick="gotoLineChart()" value="View City Prices Over The Years" />
-          </h4>
+            
           <div id="MAIN" class="relative">
             <svg id="SVG_CONTAINER"></svg>
         </div>
