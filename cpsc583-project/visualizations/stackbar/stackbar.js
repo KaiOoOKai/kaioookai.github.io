@@ -222,7 +222,7 @@ if(foods_opts.length!=0){
     { 
       let legendColor = color(foods_opts[i])
       svg.append("circle").attr("cx",100).attr("cy",15*(i+1)).attr("r", 6).style("fill", legendColor)
-      svg.append("text").attr("x", 110).attr("y", 16*(i+1)).text(foods_opts[i]).style("font-size", "15px").attr("alignment-baseline","middle")
+      svg.append("text").attr("x", 110).attr("y", 16*(i+1)).text(foods_opts[i]).style("font-size", "15px").style("font-family", "Helvetica").style("fill", "gainsboro").attr("alignment-baseline","middle")
     }
   }
   else{
@@ -230,7 +230,7 @@ if(foods_opts.length!=0){
     { 
       let legendColor = color(foods[i])
       svg.append("circle").attr("cx",100).attr("cy",15*(i+1)).attr("r", 6).style("fill", legendColor)
-      svg.append("text").attr("x", 110).attr("y", 16*(i+1)).text(foods[i]).style("font-size", "15px").attr("alignment-baseline","middle")
+      svg.append("text").attr("x", 110).attr("y", 16*(i+1)).text(foods[i]).style("font-size", "15px").style("font-family", "Helvetica").style("fill", "gainsboro").attr("alignment-baseline","middle")
     }
   }
 
