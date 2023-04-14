@@ -1,6 +1,6 @@
 
 text{
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Helvetica, sans-serif;
 }
 
 #tooltip {
@@ -12,4 +12,8 @@ html, text, svg, h3, h4, #main, .relative {
   background: #191919;
   color: gainsboro;
   padding: 10px;
+}
+
+.yAxis {
+ font-size: 20px; 
 }
