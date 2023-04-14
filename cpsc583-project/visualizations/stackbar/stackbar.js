@@ -208,6 +208,8 @@ svg.append("text")
 // Create SVG element for y-axis label
 svg.append("text")
     .attr("class", "y-axis-label")
+    .style("fill", "gainsboro")
+    .style("font-family", "Helvetica")
     .attr("text-anchor", "middle")
     .attr("transform", "rotate(-90)")
     .attr("y", MARGIN.LEFT-40)
