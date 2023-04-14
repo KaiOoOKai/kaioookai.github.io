@@ -30,7 +30,7 @@ let filteredYears = yearsArray.filter(function(year) {
 });
 
 // defaulted selected country and city
-let selectedCountry = "Afghanistan";
+let selectedCountry = "Philippines";
 let selectedCity = "Hirat";
 
 let colorScale = d3.scaleOrdinal()
@@ -230,7 +230,7 @@ function updateLineGraph(data) {
     .attr("cx", function (d) { return xScale(d.mp_year) + xScale.bandwidth() / 2; })
     .attr("cy", (d) => {return yScale(d.mp_price);})
     .attr("r", 5)
-    .style("opacity", 0.5);
+    .style("opacity", 1);
 
     var subdata = [];
     var i =0;
@@ -306,6 +306,7 @@ function updateLineGraph(data) {
       
           if (!VertLine) {
             VertLine = svg.append('line')
+          // .attr("class", "tooltip")
           .attr("transform","translate(150,100)")
           .style("stroke", "white")
           .style("stroke-width", 2)
@@ -322,7 +323,7 @@ function updateLineGraph(data) {
             .style("opacity", 1);
           }
  
-      console.log(bandIndex)
+            console.log(bandIndex)
             
             let theYear = xScale.domain()[bandIndex];
             var yValues = filteredByFood.filter(function(d) { return d.mp_year == theYear && d.mp_month == 1; }).map(function(d) {
@@ -355,10 +356,9 @@ function updateLineGraph(data) {
               style: 'currency',
               currency: 'USD',
             });
+            text += "<b>     Year: " + theYear + "</b><br><br>";
             for(let i = 0; i < yValues.length; i++)
             {
-              text += "City: " + yValues[i] + "<br>";
-              text += "Year: " + theYear + "<br>";
               text += "Food: " + yValuesFoods[i] + "<br>";
               text += "Price: " + formatter.format(yValuesPrices[i]) + "<br>";
               text += "<br>";
@@ -366,21 +366,19 @@ function updateLineGraph(data) {
             if(text == "")
             {
                 // show tooltip
-        d3.select(".tooltip").transition()
-        .style("opacity", 0);
-              tooltip.html(text)
-                .style("left", (event.pageX + 10) + "px")
+                d3.select(".tooltip")
+                tooltip.html("There was no data in this year")
+                .style("left", (event.pageX + 50) + "px")
                 .style("top", (event.pageY - 28) + "px");
             }
             else
             {
       
             // show tooltip
-            d3.select(".tooltip").transition()
-            .duration(200)
+            d3.select(".tooltip")
             .style("opacity", .9);
                   tooltip.html(text)
-                    .style("left", (event.pageX + 10) + "px")
+                    .style("left", (event.pageX + 50) + "px")
                     .style("top", (event.pageY - 28) + "px");
                 }
       
@@ -403,8 +401,6 @@ function updateLineGraph(data) {
 ///////////////////////////////////////////
 // food dropdown
 function foodSelect(sel) {
-  // console.log(" food");
-
   d3.selectAll(".line").remove();
   d3.selectAll("circle").remove();
   d3.selectAll(".legend").remove();
