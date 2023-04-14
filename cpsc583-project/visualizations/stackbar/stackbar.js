@@ -178,9 +178,9 @@ let stackedBarChart = function(data){
 
   let yAxis = d3.axisLeft()
     .scale(yScale);
-      chart.append("g")
+      chart.append("g")      
     .attr("transform", "translate("+ MARGIN.LEFT + ","+ 0 +")")
-    .call(yAxis);
+    .call(yAxis).attr("font-size", "15px");
 
   let xAxis = d3.axisBottom()
     .tickFormat(d => d)
@@ -193,16 +193,17 @@ let stackedBarChart = function(data){
     .style("text-anchor", "end")
     .attr("dx", "-.8em")
     .attr("dy", ".15em")
+    .attr("font-size", "15px")
     .attr("transform", "rotate(-65)");
-
 
 
 // Create SVG element for x-axis label
 svg.append("text")
     .attr("class", "x-axis-label")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (width/2) + "," + (height + MARGIN.BOTTOM - 300) + ")")
-    .attr("font-size", "15px")
+    .attr("fill", "gainsboro")
+    .attr("transform", "translate(" + (width/2) + "," + (height + MARGIN.BOTTOM - 250) + ")")
+    .attr("font-size", "20px")
     .text("Market Names");
 
 // Create SVG element for y-axis label
@@ -212,10 +213,11 @@ svg.append("text")
     .style("font-family", "Helvetica")
     .attr("text-anchor", "middle")
     .attr("transform", "rotate(-90)")
-    .attr("y", MARGIN.LEFT-40)
+    .attr("y", MARGIN.LEFT-80)
     .attr("x", 50 - (height / 2))
     .attr("dy", "1em")
-    .attr("font-size", "15px")
+    .attr("font-size", "20px")
+    .attr("fill", "gainsboro")
     .text("Price in CAD ($)");
     
 // Handmade legend
