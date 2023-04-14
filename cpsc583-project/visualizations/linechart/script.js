@@ -249,36 +249,58 @@ function updateLineGraph(data) {
     }
 
     // tooltip stuff
-    let VertLine = svg.append('line')
-    .attr("transform","translate(150,100)")
-    .style("stroke", "white")
-    .style("stroke-width", 2)
-    .attr("x1", 0)
-    .attr("y1", 0)
-    .attr("x2", 0)
-    .attr("y2", height - MARGIN.BOTTOM);
+    let VertLine = null;
 
-  // create a tooltip
-  var tooltip = d3.select("body")
-  .append("div")
-  .attr("class", "tooltip")
-  .style("opacity", 0);
+    // create a tooltip
+    var tooltip = null;
+    let tooltipCreated = false;
 
+    
+    svg.on("mouseout", function() {
+      VertLine.style("opacity", 0);
+      tooltip.style("opacity", 0);
+    });
   svg.on("mousemove", function() {
+    if (!tooltipCreated) {
+      // create the tooltip
+      tooltipCreated = true;
+    }
+    
     var xPos = d3.pointer(event, this);
     var bandIndex = Math.floor(xPos[0] / xScale.step());
 
+  
 
-    VertLine.attr("x1", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT)
-      .attr("x2", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT)
+    if (!VertLine) {
+      VertLine = svg.append('line')
+    .attr("transform","translate(150,100)")
+    .style("stroke", "white")
+    .style("stroke-width", 2)
+    .style("opacity", 0)
+    .attr("x1", xScale(xScale.domain()[0])-MARGIN.LEFT-10)
+    .attr("y1", 0)
+    .attr("x2", xScale(xScale.domain()[0])-MARGIN.LEFT-10)
+    .attr("y2", height - MARGIN.BOTTOM);
+    }
+    VertLine.attr("x1", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT-10)
+      .attr("x2", xScale(xScale.domain()[bandIndex])-MARGIN.LEFT-10)
+      .style("opacity", 1);
+
+      
       let theYear = xScale.domain()[bandIndex];
       var yValues = filteredByFood.filter(function(d) { return d.mp_year == theYear && d.mp_month == 1; }).map(function(d) {
         return d.CityName;
       });
-      // show tooltip
-      tooltip.transition()
-      .duration(200)
-      .style("opacity", .9);
+
+if(!tooltip)
+{
+  tooltip= d3.select("body")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+}
+    
+
       var yValuesPrices = filteredByFood.filter(function(d) { return d.mp_year == theYear; }).map(function(d) {
         return d.mp_price;
       });
@@ -304,10 +326,27 @@ function updateLineGraph(data) {
         text += "Price: " + formatter.format(yValuesPrices[i]) + "<br>";
         text += "<br>";
       }
-
+      if(text == "")
+      {
+          // show tooltip
+  tooltip.transition()
+  .style("opacity", 0);
         tooltip.html(text)
           .style("left", (event.pageX + 10) + "px")
           .style("top", (event.pageY - 28) + "px");
+      }
+      else
+      {
+
+      // show tooltip
+      tooltip.transition()
+      .duration(200)
+      .style("opacity", .9);
+            tooltip.html(text)
+              .style("left", (event.pageX + 10) + "px")
+              .style("top", (event.pageY - 28) + "px");
+          }
+
 });
   }
 }
